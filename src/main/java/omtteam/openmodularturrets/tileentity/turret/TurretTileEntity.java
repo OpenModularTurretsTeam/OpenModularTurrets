@@ -237,15 +237,17 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     /**
      * 1.12.2 {@code AbstractDirectedTurret.update} / {@code TurretHead.updateChecks}: aiming turrets turn towards the
-     * target's eyes every tick (within {@link TurretMath#MIN_PITCH}, the base only picks targets above it), then the
-     * weapon fires once the cooldown passed. Projectiles are shot at the predicted position.
+     * target's eyes every tick (within {@link TurretMath#MIN_PITCH}, the base only picks targets above it), at most the
+     * turret type's {@code turnRate} degrees per tick on each axis (issue 539; 0 turns instantly), then the weapon fires
+     * once the cooldown passed and the aim is within {@code turrets.aimTolerance} of the target. While the turret is
+     * still turning nothing is used (no energy, ammo or cooldown), and the cooldown keeps running, so it fires on its
+     * first aligned tick. The shots themselves still go along the lead (projectiles, at the predicted position) or
+     * towards the eyes (rays), not along the turret's current aim.
      */
     private void engage(EntityLivingBase target) {
         TurretWeapon weapon = getWeapon();
         Vec3d centre = centre();
-        if (weapon.aims()) {
-            aimAt(target);
-        }
+        boolean aligned = !weapon.aims() || aimAt(target);
 
         Vec3d position = target.getPositionVector();
         Vector3 velocity = trackedTargetId == target.getEntityId() && trackedTargetPos != null
@@ -254,6 +256,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
                 : Vector3.ZERO;
         trackedTargetId = target.getEntityId();
         trackedTargetPos = position;
+        if (!aligned) return;
 
         if (weapon instanceof ProjectileWeapon) {
             Vector3 toBody = new Vector3(target.posX - centre.x, aimHeight(target, centre) - centre.y,
@@ -273,14 +276,32 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         }
     }
 
-    /** Turns towards the target's eyes, within {@link TurretMath#limit}. */
-    private void aimAt(Entity target) {
+    /**
+     * Turns towards the target's eyes, within {@link TurretMath#limit}, at most the turret type's {@code turnRate}
+     * degrees per tick on each axis ({@link TurretMath#turnTowards}; 0 turns instantly).
+     *
+     * @return whether the aim is now within {@code turrets.aimTolerance} degrees of the target (always with a turn
+     *     rate of 0)
+     */
+    private boolean aimAt(Entity target) {
         Vec3d centre = centre();
         Vector3 toEyes = new Vector3(target.posX - centre.x, target.posY + target.getEyeHeight() - centre.y,
                 target.posZ - centre.z);
-        TurretMath.Angles angles = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
-        yaw = angles.yaw();
-        pitch = angles.pitch();
+        TurretMath.Angles desired = TurretMath.limit(TurretMath.anglesFor(getFace(), toEyes));
+        float rate = turnRate();
+        TurretMath.Angles now = TurretMath.turnTowards(new TurretMath.Angles(yaw, pitch), desired, rate);
+        yaw = now.yaw();
+        pitch = now.pitch();
+        // turnTowards returns the desired angles themselves once it reaches them; aimError of equal angles can be a
+        // tiny bit above 0 (rounding), so a tolerance of 0 would never pass without this check
+        return rate <= 0 || now == desired
+                || TurretMath.aimError(now, desired) <= ConfigLogicSettings.INSTANCE.aimTolerance();
+    }
+
+    /** The turret type's {@code turnRate} in degrees per tick (0: turns instantly); on a client from the synced config. */
+    private float turnRate() {
+        TurretType type = getCoreType();
+        return type == null ? 0.0F : (float) ConfigLogicSettings.setting(type).turnRate;
     }
 
     /**
@@ -322,7 +343,9 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
     /**
      * Self-targeting weapons (turret API) ignore the base's target: once the turret could fire, the weapon's picker
      * chooses the targets and the shot follows; a pick without result is repeated every
-     * {@link SelfTargetingWeapon#RETRY_TICKS} ticks.
+     * {@link SelfTargetingWeapon#RETRY_TICKS} ticks. A weapon that {@linkplain SelfTargetingWeapon#aims() aims} turns
+     * towards the first picked target at the turret type's turn rate; until the aim is within
+     * {@code turrets.aimTolerance} it uses nothing and picks again on the next tick.
      *
      * @return whether the turret is engaging something
      */
@@ -338,8 +361,9 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
             pickDelay = SelfTargetingWeapon.RETRY_TICKS;
             return false;
         }
-        if (weapon.aims()) {
-            aimAt(targets.get(0));
+        if (weapon.aims() && !aimAt(targets.get(0))) {
+            // still turning: pick again next tick (the targets may have moved), nothing used
+            return true;
         }
         TurretBase shooter = beginShot();
         if (shooter != null) {
@@ -420,7 +444,10 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     /**
      * Fires projectiles (1.12.2 {@code ProjectileTurret.shootProjectile}): one per scattershot level, with the
-     * turret's inaccuracy ({@link ProjectileMath#inaccuracy}), led by {@link TurretMath#lead}.
+     * turret's inaccuracy ({@link ProjectileMath#inaccuracy}), led by {@link TurretMath#lead}. Each projectile gets its
+     * launch point and the turret's range for the range falloff ({@link TurretProjectile#setLaunch}). This does not
+     * check the turret's aim: the turn rate only holds back the turret's own shots at the base's target (computer
+     * control and auto fire shoot at once).
      *
      * @param toAim    aim point minus turret centre
      * @param velocity target movement per tick
@@ -441,6 +468,7 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
             if (projectile == null) continue;
             projectile.setHitHandler(weapon.hitHandler());
             projectile.setPosition(origin.x, origin.y, origin.z);
+            projectile.setLaunch(origin, logic.getRange(type));
             // the lead depends on the projectile's gravity, so it is worked out per projectile
             TurretMath.Lead lead = TurretMath.lead(toAim, velocity, weapon.speed(),
                     projectile.hasNoGravity() ? 0 : projectile.gravity);
@@ -458,7 +486,8 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     /**
      * 3.x API ({@code ITurretBase.forceShootTurret}, auto fire): shoots along the current aim without a target. Only
-     * aiming weapons can do that.
+     * aiming weapons can do that. Not held back by the turn rate (issue 539); projectiles and rays still get the range
+     * falloff.
      *
      * @return whether a shot was fired
      */
@@ -504,18 +533,38 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
 
     // ---- Client ----
 
-    /** Turns the rendered model smoothly towards the synced aim and spins it while active. */
+    /**
+     * Turns the rendered model smoothly towards the synced aim and spins it while active. A turret that turns
+     * instantly eases towards the aim; one with a turn rate turns at that rate, plus a catch-up when the synced aim
+     * is further away than the server turns between two syncs.
+     */
     private void clientTick() {
         prevRenderYaw = renderYaw;
         prevRenderPitch = renderPitch;
-        renderYaw += TurretMath.angleDifference(renderYaw, yaw) * CLIENT_TURN_RATE;
-        renderPitch += (pitch - renderPitch) * CLIENT_TURN_RATE;
+        float rate = turnRate();
+        if (rate <= 0) {
+            renderYaw += TurretMath.angleDifference(renderYaw, yaw) * CLIENT_TURN_RATE;
+            renderPitch += (pitch - renderPitch) * CLIENT_TURN_RATE;
+        } else {
+            renderYaw += clientStep(TurretMath.angleDifference(renderYaw, yaw), rate);
+            renderPitch += clientStep(pitch - renderPitch, rate);
+        }
         // kept in [0, 360) so the interpolation never jumps
         renderSpin %= 360.0F;
         prevRenderSpin = renderSpin;
         if (active) {
             renderSpin += CLIENT_SPIN_RATE;
         }
+    }
+
+    /**
+     * One client tick of a turret with a turn rate: {@code rate} degrees, plus {@link #CLIENT_TURN_RATE} of what is
+     * left beyond the turn of one sync interval, never past the synced aim.
+     */
+    private static float clientStep(float diff, float rate) {
+        float distance = Math.abs(diff);
+        float step = rate + Math.max(0.0F, distance - SYNC_INTERVAL * rate) * CLIENT_TURN_RATE;
+        return Math.copySign(Math.min(step, distance), diff);
     }
 
     /** Interpolated spin angle of the melee turret's top piece, in degrees. */
@@ -550,7 +599,10 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         return pitch;
     }
 
-    /** Sets the aim (3.x API and client sync); the pitch is limited to {@link TurretMath#MIN_PITCH}. */
+    /**
+     * Sets the aim (3.x API, computer control and client sync) at once, without the turn rate (issue 539); the pitch is
+     * limited to {@link TurretMath#MIN_PITCH}.
+     */
     public void setYawPitch(float yaw, float pitch) {
         TurretMath.Angles angles = TurretMath.limit(new TurretMath.Angles(yaw, pitch));
         this.yaw = angles.yaw();

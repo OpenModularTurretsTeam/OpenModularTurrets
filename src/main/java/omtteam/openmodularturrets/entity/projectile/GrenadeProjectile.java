@@ -13,6 +13,7 @@ import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,12 +47,12 @@ public class GrenadeProjectile extends TurretProjectile {
                 AxisAlignedBB axis = new AxisAlignedBB(this.posX - 3, this.posY - 3, this.posZ - 3,
                                                        this.posX + 3, this.posY + 3, this.posZ + 3);
                 List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
+                // the range falloff at the explosion, the same for every victim (the vanilla explosion's damage is
+                // not scaled)
+                float falloff = damageFactor();
 
                 for (EntityLivingBase entity : targets) {
-
-                    int damage = OMTConfig.TURRETS.grenade_turret.baseDamage;
-
-                    damage = damageWithAmp(damage, entity);
+                    float damage = ampDamage(baseDamage(), entity) * falloff;
 
                     if (canDamageEntity(entity)) {
                         if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
@@ -122,5 +123,10 @@ public class GrenadeProjectile extends TurretProjectile {
     @Override
     public double getDamageAmpBonus() {
         return OMTConfig.TURRETS.grenade_turret.damageAmp;
+    }
+
+    @Override
+    protected TurretType getTurretType() {
+        return TurretType.GRENADE_TURRET;
     }
 }

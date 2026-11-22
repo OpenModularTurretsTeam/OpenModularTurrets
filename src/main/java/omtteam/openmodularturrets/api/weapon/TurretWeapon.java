@@ -19,6 +19,10 @@ public interface TurretWeapon {
     /** Played for every shot. */
     SoundEvent launchSound();
 
-    /** Whether the turret turns towards its target (1.12.2 {@code AbstractDirectedTurret}). */
+    /**
+     * Whether the turret turns towards its target (1.12.2 {@code AbstractDirectedTurret}). An aiming turret turns at
+     * its type's {@code turnRate} and fires only once its aim is within {@code turrets.aimTolerance}; one that does
+     * not aim fires at once.
+     */
     boolean aims();
 }

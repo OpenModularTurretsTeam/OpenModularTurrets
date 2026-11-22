@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -74,11 +75,12 @@ public class RocketProjectile extends TurretProjectile {
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 5, this.posY - 5, this.posZ - 5,
                                                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
+            // the range falloff at the explosion (straight line from the launch point, also for homing rockets), the
+            // same for every victim; the vanilla explosion's damage is not scaled
+            float falloff = damageFactor();
 
             for (EntityLivingBase entity : targets) {
-                int damage = OMTConfig.TURRETS.rocket_turret.baseDamage;
-
-                damage = damageWithAmp(damage, entity);
+                float damage = ampDamage(baseDamage(), entity) * falloff;
 
                 if (OMTConfig.TURRETS.canRocketsHurtEnderDragon && entity instanceof EntityDragon) {
                     setTagsForTurretHit(entity);
@@ -137,5 +139,10 @@ public class RocketProjectile extends TurretProjectile {
     @Override
     public double getDamageAmpBonus() {
         return OMTConfig.TURRETS.rocket_turret.damageAmp;
+    }
+
+    @Override
+    protected TurretType getTurretType() {
+        return TurretType.ROCKET_TURRET;
     }
 }

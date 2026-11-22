@@ -14,6 +14,9 @@ import java.util.function.Function;
 /**
  * Ignores the base's target (melee turret): the turret is active while any living entity its base may damage is in
  * {@link #area} and strikes all of them once the cooldown passed.
+ * <p>
+ * The range falloff of the built-in turrets is not applied to the strike: a weapon that wants it scales its damage by
+ * {@code base.getLogic().getDamageFactor(turret.getCoreType(), distance)}.
  */
 public final class AreaWeapon implements TurretWeapon {
     private final SoundEvent launchSound;

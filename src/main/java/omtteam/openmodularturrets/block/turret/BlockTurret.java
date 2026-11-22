@@ -20,6 +20,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -319,8 +320,13 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         UnownedMarker.randomDisplayTick(world, pos, random);
     }
 
-    /** The lines of the turret's overlay ({@link TurretOverlay}, as on 1.20.1+ Jade). */
+    /**
+     * The lines of the turret's overlay ({@link TurretOverlay}, as on 1.20.1, 1.21.1 and 1.21.11 Jade). The labels are
+     * localized by The One Probe on the client; the range falloff and turn rate values have format arguments, which
+     * its localization cannot carry, so they are translated here on the server.
+     */
     @Override
+    @SuppressWarnings("deprecation")
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
         if (!(te instanceof TurretTileEntity)) {
@@ -328,7 +334,7 @@ public class BlockTurret extends BlockAbstractTileEntity implements IHasItemBloc
         }
         TurretTileEntity turret = (TurretTileEntity) te;
         for (String line : TurretOverlay.lines(TurretOverlay.data(turret, player), turret.isConcealed(),
-                TOPCompatibility::getLocalizationString)) {
+                TOPCompatibility::getLocalizationString, I18n::translateToLocalFormatted)) {
             probeInfo.text(line, probeInfo.defaultTextStyle());
         }
     }

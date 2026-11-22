@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -47,7 +48,8 @@ public class BlazingClayProjectile extends TurretProjectile {
                                                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = OMTConfig.TURRETS.incendiary_turret.baseDamage;
+            // the base damage without amp bonus, with the range falloff at the projectile (the fire time is not scaled)
+            float damage = baseDamage() * damageFactor();
             for (Entity entity : targets) {
 
                 if (canDamageEntity(entity)) {
@@ -72,9 +74,9 @@ public class BlazingClayProjectile extends TurretProjectile {
                                                    this.posX + 5, this.posY + 5, this.posZ + 5);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
 
-            int damage = OMTConfig.TURRETS.incendiary_turret.baseDamage;
-
-            damage = damageWithAmp(damage, entity);
+            // the damage amp bonus of the directly hit entity applies to all, the range falloff is taken at the
+            // projectile (the fire time is not scaled)
+            float damage = ampDamage(baseDamage(), entity) * damageFactor();
 
             for (EntityLivingBase mob : targets) {
                 setTagsForTurretHit(mob);
@@ -122,5 +124,10 @@ public class BlazingClayProjectile extends TurretProjectile {
     @Override
     public double getDamageAmpBonus() {
         return OMTConfig.TURRETS.incendiary_turret.damageAmp;
+    }
+
+    @Override
+    protected TurretType getTurretType() {
+        return TurretType.INCENDIARY_TURRET;
     }
 }

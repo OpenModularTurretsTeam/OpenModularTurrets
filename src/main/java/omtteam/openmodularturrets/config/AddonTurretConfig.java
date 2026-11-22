@@ -14,7 +14,9 @@ import java.util.Map;
 
 /**
  * Config of the turrets other mods add through the turret API: {@code config/openmodularturrets_addon_turrets.cfg},
- * one category per turret id with the keys of a built-in turret section, filled with the definition's default stats.
+ * one category per turret id with the keys of a built-in turret section, filled with the definition's default stats
+ * (keys missing from an older file, such as the range falloff and turn rate, get the definition's defaults too: no
+ * falloff and instant turning unless the turret sets them).
  * Read once at start-up (changes need a restart, like the built-in turrets' {@code enabled}).
  */
 public final class AddonTurretConfig {
@@ -22,6 +24,16 @@ public final class AddonTurretConfig {
     /** The type of {@link #getSettings()} for the config sync ({@code ConfigSync.registerValue}). */
     public static final Type SETTINGS_TYPE = new TypeToken<Map<String, TurretSetting>>() {
     }.getType();
+
+    /** Comments of the range falloff and turn rate keys, as on the built-in turrets ({@link TurretSetting}). */
+    private static final String OPTIMAL_RANGE_COMMENT = "Share of the range (with range upgrades) up to which the "
+            + "turret deals full damage; from there the damage falls linearly to falloffDamage at the end of the range. "
+            + "1 = no falloff.";
+    private static final String FALLOFF_DAMAGE_COMMENT = "Share of the damage dealt at the end of the range and beyond. "
+            + "1 = no falloff.";
+    private static final String TURN_RATE_COMMENT = "Degrees the turret turns per tick towards its target, on each "
+            + "axis. 0 turns instantly.";
+    private static final double MAX_TURN_RATE = 180D;
 
     private static Map<String, TurretSetting> settings = Collections.emptyMap();
 
@@ -64,7 +76,11 @@ public final class AddonTurretConfig {
                 number(config, "accuracyUpgrade", category, d.accuracyUpgrade()),
                 number(config, "efficiencyUpgrade", category, d.efficiencyUpgrade()),
                 number(config, "recyclerNegateChance", category, d.recyclerNegateChance()),
-                number(config, "recyclerAddChance", category, d.recyclerAddChance()));
+                number(config, "recyclerAddChance", category, d.recyclerAddChance()))
+                .realism(
+                        number(config, "optimalRange", category, d.optimalRange(), OPTIMAL_RANGE_COMMENT, 1D),
+                        number(config, "falloffDamage", category, d.falloffDamage(), FALLOFF_DAMAGE_COMMENT, 1D),
+                        number(config, "turnRate", category, d.turnRate(), TURN_RATE_COMMENT, MAX_TURN_RATE));
     }
 
     private static double number(Configuration config, String key, String category, double defaultValue) {

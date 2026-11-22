@@ -13,6 +13,7 @@ import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.DisposableAmmo;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -79,11 +80,8 @@ public class DisposableTurretProjectile extends TurretProjectile {
     @Override
     public void onHitEntity(Entity entity) {
         if (entity != null && !getEntityWorld().isRemote && !(entity instanceof TurretProjectile) && !this.isDead) {
-            int damage = OMTConfig.TURRETS.disposable_turret.baseDamage;
-            if (ammo != null) {
-                damage += DisposableAmmo.getDamage(ammo);
-            }
-            damage = damageWithAmp(damage, entity);
+            // the ammo's bonus falls off with the rest of the damage
+            float damage = damage(baseDamage() + (ammo != null ? DisposableAmmo.getDamage(ammo) : 0), entity);
 
             if (canDamageEntity(entity)) {
                 if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
@@ -123,5 +121,10 @@ public class DisposableTurretProjectile extends TurretProjectile {
     @Override
     public double getDamageAmpBonus() {
         return OMTConfig.TURRETS.disposable_turret.damageAmp;
+    }
+
+    @Override
+    protected TurretType getTurretType() {
+        return TurretType.DISPOSABLE_TURRET;
     }
 }

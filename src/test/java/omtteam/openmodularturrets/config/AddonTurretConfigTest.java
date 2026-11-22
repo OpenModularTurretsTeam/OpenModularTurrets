@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AddonTurretConfigTest {
     private static final TurretType TYPE = TurretType.builder("othermod", "config_turret").build();
     private static final TurretStats DEFAULTS = TurretStats.builder(12, 60, 4, 300).accuracyDeviation(25)
-            .maxSimultaneous(2).damageAmp(0.3D).build();
+            .maxSimultaneous(2).damageAmp(0.3D).falloff(0.8D, 0.5D).turnRate(30).build();
 
     @TempDir
     Path directory;
@@ -87,6 +87,47 @@ class AddonTurretConfigTest {
         assertEquals(1D, setting.damageAmp);
         assertEquals(0D, setting.recyclerAddChance);
         assertEquals(100D, setting.baseAccuracyDeviation);
+    }
+
+    /** The range falloff and turn rate keys (issue 539): written with the definition's values, read and clamped. */
+    @Test
+    void theRangeFalloffAndTurnRateKeysAreWrittenReadAndClamped() {
+        load();
+        Configuration written = new Configuration(file());
+        assertEquals(0.8D, written.getCategory(TYPE.getId()).get("optimalRange").getDouble());
+        assertEquals(0.5D, written.getCategory(TYPE.getId()).get("falloffDamage").getDouble());
+        assertEquals(30D, written.getCategory(TYPE.getId()).get("turnRate").getDouble());
+
+        written.getCategory(TYPE.getId()).get("optimalRange").set(0.25D);
+        written.getCategory(TYPE.getId()).get("falloffDamage").set(-1D);
+        written.getCategory(TYPE.getId()).get("turnRate").set(500D);
+        written.save();
+        TurretSetting setting = load();
+
+        assertEquals(0.25D, setting.optimalRange);
+        assertEquals(0D, setting.falloffDamage);
+        assertEquals(180D, setting.turnRate);
+
+        written = new Configuration(file());
+        written.getCategory(TYPE.getId()).get("optimalRange").set(2D);
+        written.save();
+        assertEquals(1D, load().optimalRange);
+    }
+
+    /** A file from before the range falloff gets the new keys with the definition's values. */
+    @Test
+    void anOlderFileGetsTheNewKeysWithTheDefinitionsValues() {
+        load();
+        Configuration config = new Configuration(file());
+        config.getCategory(TYPE.getId()).remove("optimalRange");
+        config.getCategory(TYPE.getId()).remove("falloffDamage");
+        config.getCategory(TYPE.getId()).remove("turnRate");
+        config.save();
+
+        TurretSetting setting = load();
+
+        assertEquals(DEFAULTS, ConfigLogicSettings.toStats(setting));
+        assertTrue(new Configuration(file()).getCategory(TYPE.getId()).containsKey("turnRate"));
     }
 
     @Test

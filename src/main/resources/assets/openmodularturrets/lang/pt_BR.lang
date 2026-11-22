@@ -76,6 +76,8 @@ text.openmodularturrets.gui.turret_base_description=O núcleo de uma Torre Modul
 text.openmodularturrets.gui.turret_lever_description=Uma alavanca para gerar energia, colocada na base de nível 1.
 text.openmodularturrets.gui.range=Alcance
 text.openmodularturrets.gui.rof=Taxa de Fogo
+text.openmodularturrets.gui.optimal_range=Optimal Range
+text.openmodularturrets.gui.turn_rate=Turn Rate
 text.openmodularturrets.gui.unlimited=Unlimited
 text.openmodularturrets.gui.inaccuracy=Inaccuracy
 text.openmodularturrets.gui.drop_turrets=Soltar Torres
@@ -265,3 +267,11 @@ tooltip.openmodularturrets.memory_card.camo.label=Camouflage Settings
 tooltip.openmodularturrets.memory_card.source.turret_base=Stored from a turret base
 tooltip.openmodularturrets.memory_card.source.camo_trap=Stored from a camouflage trap
 tooltip.openmodularturrets.memory_card.no_disguise=none
+
+# range falloff and turn rate (issue 539), not translated yet
+tooltip.openmodularturrets.turret.optimal_range=Optimal Range
+tooltip.openmodularturrets.turret.optimal_range.full=Full damage up to %s blocks
+tooltip.openmodularturrets.turret.optimal_range.value=%s blocks (%s%% damage at %s)
+tooltip.openmodularturrets.turret.turn_rate=Turn Rate
+tooltip.openmodularturrets.turret.turn_rate.instant=Instant
+tooltip.openmodularturrets.turret.turn_rate.value=%s°/s

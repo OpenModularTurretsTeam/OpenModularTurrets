@@ -16,6 +16,14 @@ import java.util.Objects;
  * it returns any, the turret takes energy and ammo and calls the {@link #shot()}. While the picker finds nothing it is
  * asked again every {@link #RETRY_TICKS} ticks.
  * <p>
+ * With {@code aims} the turret turns towards the first picked entity at its type's {@code turnRate}. While its aim is
+ * more than {@code turrets.aimTolerance} off, nothing is consumed and the {@link #shot()} is not called; the picker is
+ * asked again on the next tick (with a {@code turnRate} of 0 the turret turns instantly and fires at once).
+ * <p>
+ * The range falloff of the built-in turrets is not applied to the shot: a weapon that wants it scales its damage by
+ * {@code base.getLogic().getDamageFactor(turret.getCoreType(), distance)} (distance from the centre of the turret's
+ * block).
+ * <p>
  * Trust is up to the weapon: use {@code OMTApi.canDamage(base, entity)} to skip the owner, trusted players and their
  * pets, and {@code OMTApi.hurt(...)} to deal damage the way built-in turrets do.
  */

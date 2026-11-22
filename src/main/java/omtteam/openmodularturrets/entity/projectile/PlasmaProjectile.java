@@ -15,6 +15,7 @@ import omtteam.omlib.network.OMLibNetworkingHandler;
 import omtteam.openmodularturrets.block.turret.BlockTurret;
 import omtteam.openmodularturrets.config.OMTConfig;
 import omtteam.openmodularturrets.core.turret.ProjectileMath;
+import omtteam.openmodularturrets.core.turret.TurretType;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -65,11 +66,11 @@ public class PlasmaProjectile extends TurretProjectile {
             AxisAlignedBB axis = new AxisAlignedBB(this.posX - 2, this.posY - 2, this.posZ - 2,
                                                    this.posX + 2, this.posY + 2, this.posZ + 2);
             List<EntityLivingBase> targets = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, axis);
+            // the range falloff where the burst is, the same for every victim
+            float falloff = damageFactor();
 
             for (EntityLivingBase entity : targets) {
-                int damage = OMTConfig.TURRETS.plasma_turret.baseDamage;
-
-                damage = damageWithAmp(damage, entity);
+                float damage = ampDamage(baseDamage(), entity) * falloff;
 
                 if ((entity instanceof EntityPlayer && canDamagePlayer((EntityPlayer) entity)) || canDamageEntity(entity)) {
                     if (!(entity instanceof EntityPlayer)) setTagsForTurretHit(entity);
@@ -128,5 +129,10 @@ public class PlasmaProjectile extends TurretProjectile {
     @Override
     public double getDamageAmpBonus() {
         return OMTConfig.TURRETS.plasma_turret.damageAmp;
+    }
+
+    @Override
+    protected TurretType getTurretType() {
+        return TurretType.PLASMA_TURRET;
     }
 }
