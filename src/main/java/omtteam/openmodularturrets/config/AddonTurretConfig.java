@@ -34,6 +34,7 @@ public final class AddonTurretConfig {
     private static final String TURN_RATE_COMMENT = "Degrees the turret turns per tick towards its target, on each "
             + "axis. 0 turns instantly.";
     private static final double MAX_TURN_RATE = 180D;
+    private static final String EFFECT_STRENGTH_COMMENT = "Strength of the turret's effect: push or pull speed in blocks per tick (repelling and tractor turrets), energy destroyed per shot (energy drain turret). Not used by other turrets.";
 
     private static Map<String, TurretSetting> settings = Collections.emptyMap();
 
@@ -80,7 +81,9 @@ public final class AddonTurretConfig {
                 .realism(
                         number(config, "optimalRange", category, d.optimalRange(), OPTIMAL_RANGE_COMMENT, 1D),
                         number(config, "falloffDamage", category, d.falloffDamage(), FALLOFF_DAMAGE_COMMENT, 1D),
-                        number(config, "turnRate", category, d.turnRate(), TURN_RATE_COMMENT, MAX_TURN_RATE));
+                        number(config, "turnRate", category, d.turnRate(), TURN_RATE_COMMENT, MAX_TURN_RATE))
+                .effect(number(config, "effectStrength", category, d.effectStrength(), EFFECT_STRENGTH_COMMENT,
+                        Double.MAX_VALUE));
     }
 
     private static double number(Configuration config, String key, String category, double defaultValue) {

@@ -49,7 +49,7 @@ class ConfigLogicSettingsTest {
             TurretType other = sections.put(ConfigLogicSettings.setting(type), type);
             assertNull(other, type + " shares its section with " + other);
         }
-        assertEquals(14, sections.size());
+        assertEquals(17, sections.size());
     }
 
     @Test

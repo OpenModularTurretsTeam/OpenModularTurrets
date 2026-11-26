@@ -16,6 +16,11 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - The turret item tooltip (with shift) and the Hwyla and The One Probe overlays of a turret show its optimal range and its turn rate
 - Turret API: `TurretStats.Builder.falloff(optimalShare, damageAtMaxRange)` and `turnRate(degreesPerTick)`; `TurretProjectile` has `setLaunch(…)`, `damage(Entity)`, `damage(float, Entity)`, `damageFactor(…)`, `ampDamage(…)`, `hitPoint(…)`, `baseDamage()` and `getTurretType()` for projectiles with the range falloff
 - Config: `turrets.aimTolerance` and, in every turret section (also in `openmodularturrets_addon_turrets.cfg`), `optimalRange`, `falloffDamage` and `turnRate`
+- Repelling Turret (#324, tier 3): pushes its target away from the turret with every shot (placeholder model, texture, sound and recipe)
+- Tractor Turret (#324, tier 3): pulls its target towards the turret with every shot (placeholder model, texture, sound and recipe)
+- Energy Drain Turret (#324, tier 5): destroys the energy in a player's armour and held items; targets only players who carry such energy (placeholder model, texture, sound and recipe)
+- Config: `effectStrength` in every turret section (also in `openmodularturrets_addon_turrets.cfg`: push and pull speed, energy drained per shot); the turret tooltip, Hwyla and The One Probe show it for the new turrets
+- Turret API: `TurretStats.Builder.effectStrength(…)`, and `TurretType.Builder.playersOnly()` and `skipsTargetsWithoutEnergy()`
 
 ### Changed
 
@@ -23,7 +28,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the secti
 - Projectile damage is no longer rounded down to whole points (the damage amp addon's bonus and the range falloff keep their fractions)
 - Turret API: `TurretProjectile.damageWithAmp(int, Entity)` is deprecated (whole points, no range falloff)
 - Computer control (OpenComputers and ComputerCraft: setting the yaw and pitch, forced shots) and auto fire stay instant and ignore the turn rate; their shots still get the range falloff
-- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.2.0, the same on every Minecraft version, and are part of the OMT jar
+- The game rules (`omtteam.openmodularturrets.core`) come from the shared core OpenModularCore 2.3.0, the same on every Minecraft version, and are part of the OMT jar
 - API: `TurretType.Builder.mountFaces` and `TurretType.canMountOn` take OMLib's `omtteam.omlib.core.world.Face` instead of `omtteam.openmodularturrets.core.world.Face`, which is gone; addon turrets that call them must be rebuilt
 
 ### Fixed

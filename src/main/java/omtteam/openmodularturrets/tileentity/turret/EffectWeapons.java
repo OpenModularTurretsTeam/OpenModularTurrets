@@ -13,18 +13,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import omtteam.openmodularturrets.api.weapon.AreaWeapon;
 import omtteam.openmodularturrets.api.weapon.EffectWeapon;
+import omtteam.omlib.core.world.BlockPosition;
 import omtteam.openmodularturrets.api.weapon.SelfTargetingWeapon;
 import omtteam.openmodularturrets.config.ConfigLogicSettings;
+import omtteam.openmodularturrets.core.turret.EnergyDrain;
+import omtteam.openmodularturrets.core.turret.TurretMath;
+import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.entity.projectile.NormalDamageSource;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretImmunity;
+import omtteam.openmodularturrets.tileentity.base.LivingTargetEntity;
 import omtteam.openmodularturrets.tileentity.base.TurretBase;
+import omtteam.openmodularturrets.turret.DrainableItems;
 
 import java.util.List;
 
 /**
  * Turrets that act without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}): slowing and
- * teleporter act on the base's target ({@link EffectWeapon}), the melee turret strikes everything in reach
+ * teleporter (and the repelling, tractor and energy drain turrets of issue 324) act on the base's target
+ * ({@link EffectWeapon}), the melee turret strikes everything in reach
  * ({@link AreaWeapon}).
  */
 public final class EffectWeapons {
@@ -85,6 +92,58 @@ public final class EffectWeapons {
         target.setPositionAndUpdate(destination.getX() + 0.5D, destination.getY(), destination.getZ() + 0.5D);
         world.spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
                 26, 1.0D, 1.0D, 1.0D, 0.1D);
+    }
+
+    /**
+     * Issue 324: pushes the target horizontally away from the turret and lifts it a little, with the turret's
+     * {@code effectStrength} as speed in blocks per tick ({@link TurretMath#impulse}).
+     */
+    @SuppressWarnings("unused")
+    public static void repel(WorldServer world, TurretTileEntity turret, TurretBase base, EntityLivingBase target) {
+        push(turret, target, effectStrength(turret));
+    }
+
+    /**
+     * Issue 324: pulls the target horizontally towards the turret, with the turret's {@code effectStrength} as speed
+     * in blocks per tick, but never further than {@link TurretMath#PULL_STOP_DISTANCE} from it.
+     */
+    @SuppressWarnings("unused")
+    public static void tractor(WorldServer world, TurretTileEntity turret, TurretBase base, EntityLivingBase target) {
+        push(turret, target, -effectStrength(turret));
+    }
+
+    /**
+     * Issue 324: destroys up to {@code effectStrength} energy in the target player's armour and held items
+     * ({@link DrainableItems}, {@link EnergyDrain#drain}); the energy goes nowhere (user decision).
+     */
+    @SuppressWarnings("unused")
+    public static void drain(WorldServer world, TurretTileEntity turret, TurretBase base, EntityLivingBase target) {
+        if (!(target instanceof EntityPlayer)) return;
+        EntityPlayer player = (EntityPlayer) target;
+        long drained = EnergyDrain.drain(DrainableItems.of(player), (long) effectStrength(turret));
+        if (drained > 0) {
+            world.spawnParticle(EnumParticleTypes.CRIT_MAGIC, player.posX, player.posY + player.getEyeHeight() - 0.5D,
+                    player.posZ, 12, 0.3D, 0.5D, 0.3D, 0.05D);
+        }
+    }
+
+    private static double effectStrength(TurretTileEntity turret) {
+        return ConfigLogicSettings.INSTANCE.turret(turret.getCoreType()).effectStrength();
+    }
+
+    /**
+     * Adds the core's velocity change to the target's motion. It is set directly, not as knockback, which turret
+     * damage never deals; {@code velocityChanged} sends it to a player's client.
+     */
+    private static void push(TurretTileEntity turret, EntityLivingBase target, double strength) {
+        if (strength == 0) return;
+        BlockPos pos = turret.getPos();
+        Vector3 impulse = TurretMath.impulse(new BlockPosition(pos.getX(), pos.getY(), pos.getZ()),
+                new LivingTargetEntity(target), strength);
+        target.motionX += impulse.x();
+        target.motionY += impulse.y();
+        target.motionZ += impulse.z();
+        target.velocityChanged = true;
     }
 
     /**

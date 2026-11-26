@@ -16,6 +16,7 @@ import omtteam.omlib.core.security.PlayerInfo;
 import omtteam.omlib.util.player.PlayerUtil;
 import omtteam.openmodularturrets.core.target.EntityCategory;
 import omtteam.openmodularturrets.core.target.TargetEntity;
+import omtteam.openmodularturrets.turret.DrainableItems;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -118,6 +119,12 @@ public class LivingTargetEntity extends TargetEntity {
     @Override
     public boolean hasSlowness() {
         return entity.isPotionActive(MobEffects.SLOWNESS);
+    }
+
+    /** Issue 324: a player with energy in their armour or held items ({@link DrainableItems}); mobs never. */
+    @Override
+    public boolean hasDrainableEnergy() {
+        return entity instanceof EntityPlayer && DrainableItems.any((EntityPlayer) entity);
     }
 
     /** 3.x: {@code isCreatureType(MONSTER)}, {@code EntityAnimal} / {@code EntityAmbientCreature}. */

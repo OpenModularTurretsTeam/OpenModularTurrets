@@ -102,6 +102,8 @@ public class ItemBlockTurret extends AbstractItemBlockBaseAddon {
         tooltip.add(value("optimal_range", TurretStatLines.optimalRange(stats.optimalRange(), stats.falloffDamage(),
                 stats.baseRange(), I18n::format)));
         tooltip.add(value("turn_rate", TurretStatLines.turnRate(stats.turnRate(), I18n::format)));
+        String effect = TurretStatLines.effect(type, stats.effectStrength(), I18n::format);
+        if (effect != null) tooltip.add(value("effect", effect));
     }
 
     /** "Label: value" with a white value. */

@@ -40,6 +40,9 @@ public final class ConfigLogicSettings implements LogicSettings {
         TURRETS.put(TurretType.LASER_TURRET.getPath(), turrets -> turrets.laser_turret);
         TURRETS.put(TurretType.RAILGUN_TURRET.getPath(), turrets -> turrets.railgun_turret);
         TURRETS.put(TurretType.PLASMA_TURRET.getPath(), turrets -> turrets.plasma_turret);
+        TURRETS.put(TurretType.REPELLING_TURRET.getPath(), turrets -> turrets.repelling_turret);
+        TURRETS.put(TurretType.TRACTOR_TURRET.getPath(), turrets -> turrets.tractor_turret);
+        TURRETS.put(TurretType.ENERGY_DRAIN_TURRET.getPath(), turrets -> turrets.energy_drain_turret);
     }
 
     /** Entity lists as sets, cached per config array (Forge replaces the arrays when the config changes). */
@@ -74,7 +77,7 @@ public final class ConfigLogicSettings implements LogicSettings {
         return new TurretStats(s.enabled, s.baseRange, s.baseFireRate, s.baseDamage, s.powerUsage,
                 s.baseAccuracyDeviation, s.maxSimultaneous, s.damageAmp, s.fireRateUpgrade, s.rangeUpgrade,
                 s.accuracyUpgrade, s.efficiencyUpgrade, s.recyclerNegateChance, s.recyclerAddChance, s.optimalRange,
-                s.falloffDamage, s.turnRate);
+                s.falloffDamage, s.turnRate, s.effectStrength);
     }
 
     private static Set<String> toSet(String[] entries) {
