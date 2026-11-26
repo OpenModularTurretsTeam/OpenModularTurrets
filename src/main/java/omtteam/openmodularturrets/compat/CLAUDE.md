@@ -1,0 +1,22 @@
+# CLAUDE.md — OpenModularTurrets, compat and Sable contraptions (`compat/`)
+
+Moved out of the top-level `CLAUDE.md`, so that it is loaded only when you work in this folder; the top-level file has the index.
+Section numbers (§) and relative paths (`../CLAUDE.md`, `../../OpenModularCore`) are those of the top-level file; paths are relative to the repository root.
+
+## Sable contraptions (approach B decided by the user on 2026-10-25)
+
+Turret bases and turrets on Sable contraptions (sub-levels: blocks stored in a far-away plot, placed in the world by a pose) must interact with the world where they are rendered.
+Approach B: the core keeps working in the plot frame (`BlockEntityBaseWorld` hands it entity positions converted into the base's frame), firing works in the world frame (turret centre, muzzle and face converted out of the plot; aim directions converted back into the plot for yaw/pitch).
+Projectiles inherit the contraption's velocity (decided by the user).
+Sable already handles `Level.clip`, entity box searches, entities added inside a plot (moved out), `Entity#distanceToSqr`, block interaction range, sound and particle range and explosions.
+
+- [x] Sable-independent fixes: `Clearable` on turret base and generator (Sable assembly, like `/setblock`, would otherwise duplicate their items), `rotate` / `mirror` on turret, crank and generator (`BlockMoveGameTests`)
+- [x] Build: Sable Companion jar-in-jar on `1.21.1-fabric` / `1.21.1-neoforge`; Sable in the dev runs and the NeoForge game test server
+- [x] `core.world.Pose` + `Quaternion` (plot ↔ world, with scale; `PoseTest`), `compat.SubLevelCompat` (`poseAt`, `velocityAt` in blocks per tick) and `client.compat.ClientSubLevelCompat` (`renderPoseAt`), signatures decided by the user
+- [x] Targeting in the plot frame: `TargetEntity` has `getEyeX/Y/Z` instead of `getEyeHeight`, `LivingTargetEntity(entity, pose)` converts into the base's coordinates, `BlockEntityBaseWorld` filters a contraption's widened entity search by position and starts line of sight from the converted point
+- [x] Turret side through `blockentity.turret.TurretMount` (`TurretBlockEntity#getMount()`, made once per tick: pose, face, world centre, world up, contraption velocity at the centre; `toWorld`, `toLocal`, `toLocalDirection`), shape and methods decided by the user: aiming (world direction → plot frame → `TurretMath`), projectiles (world centre, lead with the target's velocity relative to the contraption, contraption velocity added), rays (world origin and tip), line of sight (`BlockEntityBaseWorld.isClear(level, pose, plotFrom, worldTo, context)` leaves the turret's block in the plot frame), teleporter destination, melee victims filtered by their plot position (`AreaWeapon.area()` stays in plot coordinates); API notes in `docs/turret-api.md`
+- [x] Client placement outline on contraptions (outline and label drawn with `ClientSubLevelCompat.renderPoseAt`; `ClientCompat.partialTick()`)
+- [x] Game tests on a contraption (NeoForge only, `gametest/platform/neoforge/SableContraptionGameTests`): base and turret assembled with `SubLevelAssemblyHelper.assembleBlocks` and turned by 90°, resting on the world floor; a projectile and a ray turret aim at (synced aim turned into the world) and hit a world target, the teleporter pulls to the shown position, assembly keeps the base items without drops; checked to fail when the aim or teleport conversion is removed
+- [x] Create contraptions may move bases and turrets (`NeoForgeCreateMovement`; Create refuses unbreakable blocks and `PushReaction.BLOCK`, and its tags can only deny), config `bases.allowContraptionMovement` (default true; Create's check gets no player, so anyone with a contraption can move a base), decided by the user; `CreateMovementGameTests`
+- [x] Simulated's Physics Assembler (Create Aeronautics) ignores Create's checks and only refuses unbreakable blocks (`SimAssemblyContraption.movementAllowed`, no API): `platform/neoforge/mixin/SimAssemblyContraptionMixin`, a `@Pseudo` mixin in its own optional config `openmodularturrets.neoforge.mixins.json` (NeoForge only), for testing until Simulated offers a hook (the user asks upstream); `SimulatedAssemblyGameTests` calls the method by reflection and fails if Simulated renames it (Create Aeronautics on the NeoForge game test server)
+- [ ] Checked by hand in the NeoForge dev client with Create Aeronautics (moving airship, inherited projectile velocity, placement outline)
