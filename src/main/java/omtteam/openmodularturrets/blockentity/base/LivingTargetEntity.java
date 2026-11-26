@@ -18,6 +18,7 @@ import omtteam.openmodularturrets.core.target.EntityCategory;
 import omtteam.openmodularturrets.core.target.TargetEntity;
 import omtteam.openmodularturrets.core.world.Pose;
 import omtteam.openmodularturrets.core.world.Vector3;
+import omtteam.openmodularturrets.turret.DrainableItems;
 import omtteam.omlib.security.PlayerAdapter;
 
 import java.util.Optional;
@@ -125,6 +126,12 @@ public class LivingTargetEntity extends TargetEntity {
     @Override
     public boolean hasSlowness() {
         return entity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+    }
+
+    /** Players with energy in their armour or held items ({@link DrainableItems}); mobs never. */
+    @Override
+    public boolean hasDrainableEnergy() {
+        return entity instanceof Player player && DrainableItems.any(player);
     }
 
     /** 1.12.2: {@code isCreatureType(MONSTER)}, {@code EntityAnimal} / {@code EntityAmbientCreature}. */

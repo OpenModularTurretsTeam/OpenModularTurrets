@@ -231,6 +231,17 @@ public class OMTRecipeProvider extends FabricRecipeProvider {
             save.accept(turret(TurretType.PLASMA_TURRET, " B ", "MCM", "DID")
                     .define('B', b.get(4)).define('C', c.get(4)).define('M', Items.MAGMA_CREAM)
                     .define('D', CommonTags.DIAMOND_GEMS).define('I', ModItems.IO_BUS));
+            // issue 324: placeholders until the recipe rework (issue 595): the slowing turret's pattern with
+            // pistons and sticky pistons, the laser turret's with a tier 5 sensor and redstone blocks
+            save.accept(turret(TurretType.REPELLING_TURRET, "XPX", "PSP", "XIX")
+                    .define('P', Items.PISTON).define('S', ModItems.SENSORS.get(2)).define('X', CommonTags.GOLD_INGOTS)
+                    .define('I', ModItems.IO_BUS));
+            save.accept(turret(TurretType.TRACTOR_TURRET, "XPX", "PSP", "XIX")
+                    .define('P', Items.STICKY_PISTON).define('S', ModItems.SENSORS.get(2)).define('X', CommonTags.GOLD_INGOTS)
+                    .define('I', ModItems.IO_BUS));
+            save.accept(turret(TurretType.ENERGY_DRAIN_TURRET, " S ", "OCO", "IOI")
+                    .define('S', ModItems.SENSORS.get(4)).define('C', c.get(4)).define('O', Items.REDSTONE_BLOCK)
+                    .define('I', ModItems.IO_BUS));
         }
 
         /** 1.12.2 {@code lever_block_vanilla.json}: its pattern had lost its spaces; restored as a crank (user decision). */

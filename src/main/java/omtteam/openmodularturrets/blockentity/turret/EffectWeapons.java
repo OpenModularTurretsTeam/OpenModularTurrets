@@ -10,23 +10,30 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import omtteam.openmodularturrets.api.weapon.AreaWeapon;
 import omtteam.openmodularturrets.api.weapon.EffectWeapon;
 import omtteam.openmodularturrets.blockentity.TurretBaseBlockEntity;
+import omtteam.openmodularturrets.blockentity.base.LivingTargetEntity;
 import omtteam.omlib.compat.VersionCompat;
 import omtteam.openmodularturrets.config.OMTConfig;
+import omtteam.openmodularturrets.core.turret.EnergyDrain;
+import omtteam.openmodularturrets.core.turret.TurretMath;
+import omtteam.openmodularturrets.core.world.Vector3;
 import omtteam.openmodularturrets.entity.projectile.TurretDamage;
 import omtteam.openmodularturrets.entity.projectile.TurretImmunity;
 import omtteam.openmodularturrets.registry.ModDamageTypes;
+import omtteam.openmodularturrets.turret.DrainableItems;
+import omtteam.omlib.core.world.BlockPosition;
 
 import java.util.List;
 
 /**
- * Turrets that act without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}): slowing and
- * teleporter act on the base's target ({@link EffectWeapon}), the melee turret strikes everything in reach
- * ({@link AreaWeapon}).
+ * Turrets that act without aiming (1.12.2 {@code TurretHead} subclasses using {@code updateChecks}): slowing,
+ * teleporter, repelling, tractor and energy drain act on the base's target ({@link EffectWeapon}), the melee turret
+ * strikes everything in reach ({@link AreaWeapon}).
  */
 public final class EffectWeapons {
     /** Slowness IV and weakness IV for 10 seconds. */
@@ -80,6 +87,60 @@ public final class EffectWeapons {
         target.teleportTo(to.x, to.y, to.z);
         Vec3 centre = mount.centre();
         level.sendParticles(ParticleTypes.PORTAL, centre.x, centre.y, centre.z, 26, 1.0D, 1.0D, 1.0D, 0.1D);
+    }
+
+    /**
+     * Issue 324: pushes the target horizontally away from the turret and lifts it a little, with the turret's
+     * {@code effectStrength} as speed in blocks per tick ({@link TurretMath#impulse}).
+     */
+    @SuppressWarnings("unused")
+    public static void repel(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
+        push(turret, target, effectStrength(turret));
+    }
+
+    /**
+     * Issue 324: pulls the target horizontally towards the turret, with the turret's {@code effectStrength} as speed
+     * in blocks per tick, but never further than {@link TurretMath#PULL_STOP_DISTANCE} from it.
+     */
+    @SuppressWarnings("unused")
+    public static void tractor(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
+        push(turret, target, -effectStrength(turret));
+    }
+
+    /**
+     * Issue 324: destroys up to {@code effectStrength} energy in the target player's armour and held items
+     * ({@link DrainableItems}, {@link EnergyDrain#drain}); the energy goes nowhere (user decision).
+     */
+    @SuppressWarnings("unused")
+    public static void drain(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base, Entity target) {
+        if (target instanceof Player player) {
+            long drained = EnergyDrain.drain(DrainableItems.of(player), (long) effectStrength(turret));
+            if (drained > 0) {
+                Vec3 eyes = player.getEyePosition();
+                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, eyes.x, eyes.y - 0.5D, eyes.z, 12, 0.3D, 0.5D, 0.3D, 0.05D);
+            }
+        }
+    }
+
+    private static double effectStrength(TurretBlockEntity turret) {
+        return OMTConfig.get().turrets.get(turret.getTurretType()).effectStrength;
+    }
+
+    /**
+     * Adds the core's velocity change to the target's motion. It is computed in the turret's own frame (the plot on a
+     * sub-level, see {@link TurretMount}) and turned back into the world. The change is set directly, not as
+     * knockback, which turret damage never deals; {@code hurtMarked} sends it to a player's client.
+     */
+    private static void push(TurretBlockEntity turret, Entity target, double strength) {
+        if (!(target instanceof LivingEntity living) || strength == 0) return;
+        TurretMount mount = turret.getMount();
+        BlockPos pos = turret.getBlockPos();
+        Vector3 local = TurretMath.impulse(new BlockPosition(pos.getX(), pos.getY(), pos.getZ()),
+                new LivingTargetEntity(living, mount.pose()), strength);
+        Vector3 world = mount.pose().directionToWorld(local);
+        target.addDeltaMovement(new Vec3(world.x(), world.y(), world.z()));
+        target.hasImpulse = true;
+        target.hurtMarked = true;
     }
 
     /**

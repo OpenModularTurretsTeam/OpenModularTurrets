@@ -2,13 +2,15 @@ package omtteam.openmodularturrets.turret;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import omtteam.openmodularturrets.core.turret.TurretType;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Values of the range falloff and the turn rate (issue 539) as shown in the turret item tooltip and in Jade, so both
- * show the same text. The results are white values for a "Label: value" line.
+ * Values of the range falloff and the turn rate (issue 539) and of a turret's effect (issue 324) as shown in the turret
+ * item tooltip and in Jade, so both show the same text. The results are white values for a "Label: value" line.
  */
 public final class TurretStatLines {
     private static final String PREFIX = "tooltip.openmodularturrets.turret.";
@@ -48,6 +50,19 @@ public final class TurretStatLines {
         }
         return Component.translatable(PREFIX + "turn_rate.value", format(degreesPerTick * TICKS_PER_SECOND))
                 .withStyle(ChatFormatting.WHITE);
+    }
+
+    /**
+     * The effect of a turret with an {@code effectStrength} above 0, in the turret's own words: the translation key
+     * {@code tooltip.<namespace>.turret.<path>.effect} with the strength as its argument (e.g. "Push 0.8").
+     *
+     * @return null for a turret without an effect
+     */
+    @Nullable
+    public static Component effect(TurretType type, double effectStrength) {
+        if (effectStrength <= 0) return null;
+        return Component.translatable("tooltip." + type.getNamespace() + ".turret." + type.getPath() + ".effect",
+                format(effectStrength)).withStyle(ChatFormatting.WHITE);
     }
 
     /** One decimal at most, without a trailing ".0" ({@code 7.5}, {@code 9}). */

@@ -2,11 +2,15 @@ package omtteam.openmodularturrets.gametest.platform.neoforge;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import net.neoforged.neoforge.energy.ComponentEnergyStorage;
 import omtteam.openmodularturrets.gametest.OMTGameTestMod;
 import omtteam.openmodularturrets.gametest.ProjectileTurretGameTests;
+import omtteam.openmodularturrets.gametest.TestBattery;
 import omtteam.omlib.registry.RegistrationStep;
 
 import java.util.List;
@@ -22,6 +26,9 @@ public final class OMTNeoForgeGameTests {
         modBus.addListener((RegisterEvent event) -> steps.stream()
                 .filter(step -> step.registry().equals(event.getRegistryKey()))
                 .forEach(step -> step.register().run()));
+        modBus.addListener((RegisterCapabilitiesEvent event) -> event.registerItem(Capabilities.EnergyStorage.ITEM,
+                (stack, context) -> new ComponentEnergyStorage(stack, TestBattery.Energy.COMPONENT, TestBattery.CAPACITY),
+                TestBattery.ITEM));
         NeoForge.EVENT_BUS.addListener((EntityJoinLevelEvent event) -> {
             if (!event.getLevel().isClientSide()) {
                 ProjectileTurretGameTests.onEntityLoad(event.getEntity());

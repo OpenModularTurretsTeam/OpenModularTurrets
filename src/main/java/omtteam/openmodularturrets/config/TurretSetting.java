@@ -42,6 +42,8 @@ public class TurretSetting {
     public double falloffDamage = TurretStats.NO_FALLOFF_DAMAGE;
     @Comment("Degrees the turret turns per tick towards its target, on each axis. 0 turns instantly.") @Range(min = 0, max = 180)
     public double turnRate = TurretStats.INSTANT_TURN;
+    @Comment("Strength of the turret's effect: push or pull speed in blocks per tick (repelling and tractor turrets), energy destroyed per shot (energy drain turret). Not used by other turrets.") @Range(min = 0)
+    public double effectStrength = TurretStats.NO_EFFECT;
 
     @SuppressWarnings("unused")
     public TurretSetting() {
@@ -80,16 +82,28 @@ public class TurretSetting {
         return this;
     }
 
+    /**
+     * Sets the strength of the turret's effect (issue 324, see {@link TurretStats#effectStrength}); without this call
+     * a setting has none.
+     *
+     * @return this setting
+     */
+    public TurretSetting effect(double effectStrength) {
+        this.effectStrength = effectStrength;
+        return this;
+    }
+
     public static TurretSetting of(TurretStats s) {
         return new TurretSetting(s.enabled(), s.baseRange(), s.baseFireRate(), s.baseDamage(), s.powerUsage(),
                 s.baseAccuracyDeviation(), s.maxSimultaneous(), s.damageAmp(), s.fireRateUpgrade(), s.rangeUpgrade(),
                 s.accuracyUpgrade(), s.efficiencyUpgrade(), s.recyclerNegateChance(), s.recyclerAddChance())
-                .realism(s.optimalRange(), s.falloffDamage(), s.turnRate());
+                .realism(s.optimalRange(), s.falloffDamage(), s.turnRate())
+                .effect(s.effectStrength());
     }
 
     public TurretStats toStats() {
         return new TurretStats(enabled, baseRange, baseFireRate, baseDamage, powerUsage, baseAccuracyDeviation,
                 maxSimultaneous, damageAmp, fireRateUpgrade, rangeUpgrade, accuracyUpgrade, efficiencyUpgrade,
-                recyclerNegateChance, recyclerAddChance, optimalRange, falloffDamage, turnRate);
+                recyclerNegateChance, recyclerAddChance, optimalRange, falloffDamage, turnRate, effectStrength);
     }
 }

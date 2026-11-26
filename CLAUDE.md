@@ -281,7 +281,7 @@ Never pick a signature on your own because it seems obvious.
 The port is done (all turrets, bases, upgrades, addons, generator, inventory expanders, camouflage, memory card, Jade, turret API, publishing, both loaders); the sections below keep the design of the larger features and their open items.
 Update the open items as work progresses.
 
-- [ ] Checked in a client: the inventory expanders (count drawing, tooltip, model) and the range falloff and turn rate (issue 539; tooltip and Jade lines, `turret.TurretStatLines`).
+- [ ] Checked in a client: the inventory expanders (count drawing, tooltip, model), the range falloff and turn rate (issue 539; tooltip and Jade lines, `turret.TurretStatLines`), and the repelling, tractor and energy drain turrets (issue 324).
 - "Sort Ammo" (requested by the user on 2026-10-27): right column of the base GUI below the admin buttons, for everyone who opens the GUI (`BasePackets.Action.SORT_AMMO`); `TurretBaseInventory.sortAmmo` merges equal ammo up to the slot limit and orders Minecraft items, then OMT ammo, then other mods' items, each by registry name (the core's `AmmoSort`); `BaseGuiGameTests.sortButtonSortsTheAmmo`, `AmmoSortGameTests`.
 - Every turret has a game test (`ProjectileTurretGameTests`, `RayTurretGameTests`, `EffectTurretGameTests`): on a base of its tier with energy and ammo it must hit a hostile target 5 blocks in front of it (the melee turret one in its 3×2×3 reach); projectile turrets must spawn their projectile, ray turrets trace their ray; the railgun ignores scattershot upgrades (`railgunIgnoresScattershot`).
 - Mixins on NeoForge: the same `openmodularturrets.mixins.json` under `[[mixins]]` in `neoforge.mods.toml`.

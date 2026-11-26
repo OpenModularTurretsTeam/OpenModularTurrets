@@ -278,6 +278,19 @@ public class ConfigData {
         public TurretSetting crossbowTurret = new TurretSetting(true, 15, 30, 5, 20, 30, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D)
                 .realism(0.7D, 0.6D, 12);
 
+        @Comment("Repelling turret.")
+        @SerializedName("repelling_turret")
+        public TurretSetting repellingTurret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0).effect(0.8D);
+        @Comment("Tractor turret.")
+        @SerializedName("tractor_turret")
+        public TurretSetting tractorTurret = new TurretSetting(true, 20, 25, 0, 5000, 0, 4, 0D, 0.1D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0).effect(0.8D);
+        @Comment("Energy drain turret.")
+        @SerializedName("energy_drain_turret")
+        public TurretSetting energyDrainTurret = new TurretSetting(true, 25, 10, 0, 8000, 0, 4, 0D, 0.125D, 2, 0, 0.08D, 0.1D, 0.05D)
+                .realism(1, 1, 0).effect(10000D);
+
         @Comment("Turrets added by other mods, by turret id. Entries are added and removed with the mods.")
         @SerializedName("addon_turrets")
         public Map<String, TurretSetting> addonTurrets = addonDefaults();
@@ -314,6 +327,9 @@ public class ConfigData {
                 case "laser_turret" -> laserTurret;
                 case "railgun_turret" -> railgunTurret;
                 case "plasma_turret" -> plasmaTurret;
+                case "repelling_turret" -> repellingTurret;
+                case "tractor_turret" -> tractorTurret;
+                case "energy_drain_turret" -> energyDrainTurret;
                 default -> throw new IllegalArgumentException("Unknown built-in turret " + type);
             };
         }
