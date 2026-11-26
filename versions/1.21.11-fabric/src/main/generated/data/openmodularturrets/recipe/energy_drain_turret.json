@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "openmodularturrets:chamber_tier_five",
+    "I": "openmodularturrets:io_bus",
+    "O": "minecraft:redstone_block",
+    "S": "openmodularturrets:sensor_tier_five"
+  },
+  "pattern": [
+    " S ",
+    "OCO",
+    "IOI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "openmodularturrets:energy_drain_turret"
+  }
+}

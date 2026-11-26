@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "openmodularturrets:item/energy_drain_turret",
+    "model": {
+      "type": "openmodularturrets:turret",
+      "turret": "openmodularturrets:energy_drain_turret"
+    }
+  }
+}

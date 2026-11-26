@@ -272,6 +272,7 @@ Update the open items as work progresses.
 
 - [ ] Inventory expanders: not checked in a client yet (count drawing, tooltip, model).
 - [ ] Range falloff and turn rate (issue 539, options A chosen by the user on 2026-11-22; OpenModularCore 2.2.0): not yet ported to 1.20.1, 1.21.1 and 1.12; not checked in a client yet.
+- [ ] Repelling, tractor and energy drain turrets (issue 324, decided by the user on 2026-11-22; OpenModularCore 2.3.0): ported to 1.20.1, 1.21.1 and 1.12 on their `new-turrets` branches; not checked in a client yet.
 - Skipped on purpose: the old expanders (own inventory or energy), the loot deleter and the power generator of 1.12.2.
 - Camouflage: `camo` must not depend on `compat` (it would join a package cycle): hosts call `remesh()` themselves after `CamoData.read`.
 - ArchUnit: the cycle `compat` / `compat.network` ↔ `platform` (facades call the services, the service interfaces use the facades' types) is accepted in `KNOWN_CYCLES` (decided by the user).

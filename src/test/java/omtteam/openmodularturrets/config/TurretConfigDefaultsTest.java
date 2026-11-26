@@ -11,7 +11,10 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-/** The defaults of the range falloff and the turn rate (issue 539), and their way from the config to the stats. */
+/**
+ * The defaults of the range falloff and the turn rate (issue 539) and of the effect strength (issue 324), and their way
+ * from the config to the stats.
+ */
 class TurretConfigDefaultsTest {
     private static final double DELTA = 1.0E-9;
 
@@ -41,6 +44,9 @@ class TurretConfigDefaultsTest {
         map.put(TurretType.SLOWING_TURRET, new Realism(1, 1, 0));
         map.put(TurretType.TELEPORTER_TURRET, new Realism(1, 1, 0));
         map.put(TurretType.MELEE_TURRET, new Realism(1, 1, 0));
+        map.put(TurretType.REPELLING_TURRET, new Realism(1, 1, 0));
+        map.put(TurretType.TRACTOR_TURRET, new Realism(1, 1, 0));
+        map.put(TurretType.ENERGY_DRAIN_TURRET, new Realism(1, 1, 0));
         return map;
     }
 
@@ -65,11 +71,11 @@ class TurretConfigDefaultsTest {
         }
     }
 
-    /** All 17 stats survive the way from an addon's default stats into the config and back. */
+    /** All 18 stats survive the way from an addon's default stats into the config and back. */
     @Test
     void settingRoundTripKeepsEveryStat() {
         TurretStats stats = new TurretStats(false, 21, 17, 9, 1234, 3.5D, 2, 0.07D, 0.15D, 3, 0.25D, 0.09D, 0.12D,
-                0.06D, 0.4D, 0.3D, 7.5D);
+                0.06D, 0.4D, 0.3D, 7.5D, 2.5D);
         assertEquals(stats, TurretSetting.of(stats).toStats());
         TurretStats built = TurretStats.builder(12, 10, 4, 100).falloff(0.8D, 0.5D).turnRate(30).build();
         assertEquals(built, TurretSetting.of(built).toStats());
@@ -85,6 +91,27 @@ class TurretConfigDefaultsTest {
         assertEquals(TurretStats.INSTANT_TURN, stats.turnRate(), DELTA);
     }
 
+    /** The effect strength of the turrets of issue 324 (placeholders until they are tuned); 0 for all others. */
+    @Test
+    void onlyTheEffectTurretsHaveAnEffectStrength() {
+        ConfigData.Turrets turrets = new ConfigData.Turrets();
+        Map<TurretType, Double> effects = Map.of(TurretType.REPELLING_TURRET, 0.8D, TurretType.TRACTOR_TURRET, 0.8D,
+                TurretType.ENERGY_DRAIN_TURRET, 10000D);
+        for (TurretType type : TurretType.values()) {
+            double expected = effects.getOrDefault(type, TurretStats.NO_EFFECT);
+            assertEquals(expected, turrets.get(type).effectStrength, DELTA, "effectStrength of " + type);
+            assertEquals(expected, turrets.get(type).toStats().effectStrength(), DELTA, "stats effectStrength of " + type);
+        }
+    }
+
+    @Test
+    void settingWithoutEffectHasNone() {
+        TurretSetting setting = new TurretSetting(true, 10, 20, 2, 100, 10, 4, 0.05D, 0.1D, 2, 0.2D, 0.08D, 0.1D, 0.05D);
+        assertEquals(TurretStats.NO_EFFECT, setting.toStats().effectStrength(), DELTA);
+        assertEquals(1.5D, TurretSetting.of(TurretStats.builder(10, 20, 2, 100).effectStrength(1.5D).build())
+                .toStats().effectStrength(), DELTA);
+    }
+
     @Test
     void aimToleranceDefaultsToFiveDegrees() {
         assertEquals(5.0D, new ConfigData.Turrets().aimTolerance, DELTA);
@@ -95,6 +122,7 @@ class TurretConfigDefaultsTest {
         assertRange(TurretSetting.class, "optimalRange", 0, 1);
         assertRange(TurretSetting.class, "falloffDamage", 0, 1);
         assertRange(TurretSetting.class, "turnRate", 0, 180);
+        assertEquals(0, TurretSetting.class.getField("effectStrength").getAnnotation(Range.class).min(), DELTA);
         assertRange(ConfigData.Turrets.class, "aimTolerance", 0, 180);
     }
 

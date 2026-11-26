@@ -24,6 +24,9 @@ Old meta/damage-based variants are flattened into separate registry entries.
 | `openmodularturrets:arc_turret` | – | `openmodularturrets:arc_turret` |
 | `openmodularturrets:laser_turret` | – | `openmodularturrets:laser_turret` |
 | `openmodularturrets:rail_gun_turret` | – | `openmodularturrets:railgun_turret` |
+| – (new in 4.1) | – | `openmodularturrets:repelling_turret` |
+| – (new in 4.1) | – | `openmodularturrets:tractor_turret` |
+| – (new in 4.1) | – | `openmodularturrets:energy_drain_turret` |
 | `openmodularturrets:lever_block` | – | `openmodularturrets:lever_block` |
 | `ompd:hardened` | 0 | `openmodularturrets:hardened_tier_one` |
 | `ompd:hardened` | 1 | `openmodularturrets:hardened_tier_two` |
