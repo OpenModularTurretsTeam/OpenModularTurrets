@@ -1,6 +1,8 @@
 package omtteam.openmodularturrets.gametest.platform.forge;
 
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -10,6 +12,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.gametest.OMTGameTestMod;
 import omtteam.openmodularturrets.gametest.ProjectileTurretGameTests;
+import omtteam.openmodularturrets.gametest.TestBattery;
 import omtteam.omlib.registry.RegistrationStep;
 
 import java.util.List;
@@ -30,6 +33,11 @@ public final class OMTForgeGameTests {
         modBus.addListener((RegisterEvent event) -> steps.stream()
                 .filter(step -> step.registry().equals(event.getRegistryKey()))
                 .forEach(step -> step.register().run()));
+        MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, (AttachCapabilitiesEvent<ItemStack> event) -> {
+            if (event.getObject().is(TestBattery.ITEM)) {
+                event.addCapability(TestBattery.id("energy"), new ForgeTestBatteryEnergy(event.getObject()));
+            }
+        });
         MinecraftForge.EVENT_BUS.addListener((ServerStartingEvent event) -> {
             GameRules rules = event.getServer().getGameRules();
             rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(false, event.getServer());

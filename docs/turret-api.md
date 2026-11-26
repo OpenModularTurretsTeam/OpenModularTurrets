@@ -2,7 +2,7 @@
 
 Other mods (Fabric and Forge) can add turrets to Open Modular Turrets (OMT).
 An added turret is a full turret: it mounts on a base, uses the base's targeting, energy, ammo, upgrades, addons and trusted players, has a config entry and shows in the OMT creative tab, in tooltips and in Jade.
-The 14 built-in turrets are registered through the same API (`registry/BuiltinTurrets.java`), so they are the reference examples.
+The 17 built-in turrets are registered through the same API (`registry/BuiltinTurrets.java`), so they are the reference examples.
 
 This guide is for Minecraft 1.20.1 (branch `1.20.1`, Fabric and Forge); the wiki page `Turret-API` covers the other Minecraft versions.
 The API is the same on both loaders; only the way OMT finds your classes differs.
@@ -69,6 +69,8 @@ The built-in slowing and railgun turrets use it for their coloured dust, as on 1
 | `mountFaces(Face…)` | base faces it may mount on (default all six; the melee turret uses `UP, DOWN`) |
 | `ignoresScattershot()` | scattershot upgrades add no shots, ammo, energy or scatter |
 | `skipsSlowedTargets()` | entities with slowness are not targeted (slowing turret) |
+| `playersOnly()` | only players are targeted, whatever the base's mob settings (energy drain turret) |
+| `skipsTargetsWithoutEnergy()` | entities whose `TargetEntity.hasDrainableEnergy()` is false are not targeted; OMT's adapter answers true for players with energy in their armour or held items (energy drain turret) |
 
 ### Weapons
 
@@ -76,7 +78,7 @@ The built-in slowing and railgun turrets use it for their coloured dust, as on 1
 | --- | --- | --- |
 | `ProjectileWeapon` | spawns a `TurretProjectile` per shot, aimed with lead | machine gun, rocket, plasma |
 | `RayWeapon` | instant ray to the target; damage from a `RayProfile`, visuals and damage types from the builder | laser, railgun, arc |
-| `EffectWeapon` | runs a `TargetEffect` on the base's target, no aiming | slowing, teleporter |
+| `EffectWeapon` | runs a `TargetEffect` on the base's target, no aiming | slowing, teleporter, repelling, tractor, energy drain |
 | `AreaWeapon` | ignores the base's target, strikes every damageable living entity in an area | melee |
 | `SelfTargetingWeapon` | ignores the base's target, picks its own from all entities around the base | – |
 
@@ -144,6 +146,8 @@ Read the current values with `OMTConfig.get().turrets.get(type)`.
 `falloff(optimalShare, damageAtMaxRange)` sets the range falloff (keys `optimalRange` and `falloffDamage`): full damage up to `optimalShare` of the turret's range (with range upgrades), then linearly less down to `damageAtMaxRange` of the damage at the end of the range and beyond.
 `turnRate(degreesPerTick)` sets how fast the turret turns towards its target (key `turnRate`, on yaw and pitch each); an aiming turret fires only once its aim is within `turrets.aimTolerance` degrees.
 Without these calls a turret has no falloff and turns instantly.
+`effectStrength(value)` is a free number for an effect weapon (key `effectStrength`, default 0): the built-in repelling and tractor turrets read it as their push or pull speed in blocks per tick, the energy drain turret as the energy it destroys per shot.
+Read it in your effect with `OMTConfig.get().turrets.get(type).effectStrength`; with a value above 0 the turret tooltip and Jade show it with the lang key `tooltip.<namespace>.turret.<path>.effect` (one `%s` for the value).
 OMT applies the falloff to projectile and ray weapons: a projectile measures from its launch point to the hit, a ray from the turret to where it enters the entity (arc jumps take the first hit's share).
 Effect, area and self-targeting weapons get no falloff; one that wants it scales its damage by `base.getLogic().getDamageFactor(turret.getTurretType(), distance)`.
 A turn rate only makes sense for a turret whose model turns (`aims() == true`): a ray weapon always aims, so a turn rate on a turret with a static model only delays its shots.

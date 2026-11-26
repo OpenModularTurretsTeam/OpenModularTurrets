@@ -96,6 +96,10 @@ final class BuiltinTurrets {
                 EffectWeapons::strike);
         if (type == TurretType.SLOWING_TURRET) return new EffectWeapon(ModSounds.SLOWING_LAUNCH, EffectWeapons::slow);
         if (type == TurretType.TELEPORTER_TURRET) return new EffectWeapon(ModSounds.TELEPORT_LAUNCH, EffectWeapons::teleport);
+        // issue 324; the sounds are stand-ins until the turrets get their own
+        if (type == TurretType.REPELLING_TURRET) return new EffectWeapon(ModSounds.SLOWING_LAUNCH, EffectWeapons::repel);
+        if (type == TurretType.TRACTOR_TURRET) return new EffectWeapon(ModSounds.TELEPORT_LAUNCH, EffectWeapons::tractor);
+        if (type == TurretType.ENERGY_DRAIN_TURRET) return new EffectWeapon(ModSounds.ARC_LAUNCH, EffectWeapons::drain);
         // ray colours from 1.12.2 ColorOM(r, g, b, a); the arc lightning (no 1.12.2 colour) is light blue
         if (type == TurretType.ARC_TURRET) return RayWeapon.builder(ModSounds.ARC_LAUNCH, RayProfile.ARC)
                 .color(argb(0.6F, 0.8F, 1F, 0.6F)).duration(3).lightning().drawFromTip()
