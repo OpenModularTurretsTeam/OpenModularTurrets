@@ -98,6 +98,7 @@ All callbacks run on the server thread.
 **Ships**: on a Rifted Valkyrium (or Valkyrien Skies 1) ship, the turret's block position is in ship space while the entities are in the world.
 OMT converts for its own weapons; code of yours that compares the turret's position with entities or places things in the world converts through OMLib's `ShipFrames.at(world, turret.getPos())` (`omtteam.omlib.compat.valkyrien.ShipFrame`: `toLocal`, `toWorld`, `rotateToLocal`, `rotateToWorld`; without a ship mod it converts nothing).
 Entity searches with a box in ship space, projectiles spawned in ship space, sounds and particles are converted by the ship mod.
+The launch point you pass to `TurretProjectile.setLaunch` is not: give it in the world (`toWorld`), as the projectile's hit points are, or the range falloff measures the wrong distance.
 
 ### Stats and config
 

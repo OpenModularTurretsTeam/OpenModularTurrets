@@ -474,13 +474,16 @@ public class TurretTileEntity extends TileEntityBase implements ITurretHead, ITi
         TurretType type = getCoreType();
         float inaccuracy = ProjectileMath.inaccuracy(logic.getAccuracyDeviation(type));
         Vec3d origin = centre();
+        Vec3d launch = ShipFrames.at(world, pos).toWorld(origin);
         ItemStack ammo = lastAmmoStack();
         for (int i = 0; i <= logic.getScattershotCount(type); i++) {
             TurretProjectile projectile = weapon.factory().create(world, ammo, target, base);
             if (projectile == null) continue;
             projectile.setHitHandler(weapon.hitHandler());
             projectile.setPosition(origin.x, origin.y, origin.z);
-            projectile.setLaunch(origin, logic.getRange(type));
+            // the ship mod moves a projectile spawned in ship space into the world, so the falloff measures from the
+            // launch point in the world
+            projectile.setLaunch(launch, logic.getRange(type));
             // the lead depends on the projectile's gravity, so it is worked out per projectile
             TurretMath.Lead lead = TurretMath.lead(toAim, velocity, weapon.speed(),
                     projectile.hasNoGravity() ? 0 : projectile.gravity);
