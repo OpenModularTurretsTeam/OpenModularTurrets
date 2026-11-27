@@ -66,7 +66,7 @@ This is the only place where the two meet, and the reason the core can be tested
 | `settings.LogicSettings` | `config.ConfigLogicSettings` | config values (turret stats, base tiers, entity lists) |
 | `security.SecurityEnvironment` (OMLib) | `security.LevelSecurityEnvironment` (OMLib, with `OMTOwnershipSettings`) | scoreboard teams, operator rights |
 | `computer.ComputerTurrets` | `blockentity.base.BaseComputerTurrets` | the turrets on a base's faces: aim, auto fire, forced shot |
-| `computer.PlayerNames` | `platform.neoforge.opencomputers.NeoForgePlayerNames` | a player's UUID by name (online, or a player who joined before), without asking Mojang |
+| `computer.PlayerNames` | `platform.neoforge.opencomputers.NeoForgePlayerNames`, `compat.computercraft.ServerPlayerNames` | a player's UUID by name (online, or a player who joined before), without asking Mojang |
 
 All positions the core sees are in the base's coordinates.
 On a Sable contraption these are the coordinates of its plot, far away from where the base is shown: `BlockEntityBaseWorld` converts entity positions into them with the base's `core.world.Pose` (from `compat.SubLevelCompat`), and converts the start of a line-of-sight check back into the world.
@@ -124,7 +124,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
 | `security`, `camo` | the mod's ownership rules (`OMTOwnershipSettings`); the trust lists' Minecraft side (NBT, player lookup) is in OMLib, and camouflage rules |
 | `compat` | the porting helpers that keep call sites identical on the version branches (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge`), Jade (server half here, tooltips in `client.compat.jade`), and Sable contraptions (`SubLevelCompat`: poses and velocities through Sable Companion; `client.compat.ClientSubLevelCompat` for the drawn pose) |
-| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader; `platform.neoforge.opencomputers` is the OpenComputers: Rebooted driver and component |
+| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader; `platform.neoforge.opencomputers` is the OpenComputers: Rebooted driver and component; `platform.<loader>.computercraft` registers the CC: Tweaked peripheral |
 | `datagen` | recipes, loot tables, tags, damage types (Fabric only; the NeoForge build converts the Fabric output) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
@@ -234,6 +234,10 @@ A computer reaches a turret base through three layers:
 3. The mod integration, per loader: `platform.neoforge.opencomputers` (OpenComputers: Rebooted exists for NeoForge 1.21.1 only).
    `OMTNeoForge` registers `TurretBaseDriver` at common setup when OpenComputers is installed (`OpenComputersCompat`); an Adapter next to a base gets a `TurretBaseEnvironment`, the component `turret_base`, whose callbacks (1.12.2's names and docs) turn OpenComputers' arguments into plain values and call the commands.
    They are not direct, so OpenComputers runs them on the server thread.
+   **CC: Tweaked** (both loaders, `compat.computercraft`): `TurretBasePeripheral` is the peripheral `turret_base`, one class for both loaders; its `@LuaFunction(mainThread = true)` methods have the names of the OpenComputers component (`changeAccessLevel` and `forceShootAllTurrets` of 1.12.2 as well) and call the same commands, so CC runs them on the server thread.
+   Only the registration is per loader, and only when `computercraft` is loaded: `platform.fabric.computercraft.FabricComputerCraft` (`PeripheralLookup`) and `platform.neoforge.computercraft.NeoForgeComputerCraft` (`PeripheralCapability`, in `RegisterCapabilitiesEvent`).
+   `ServerPlayerNames` reads the server's `usercache.json` itself, as the profile cache has no lookup that never asks Mojang.
+   CC: Tweaked is compile-only (its API from `maven.squiddev.cc`, never bundled), and the full mod runs in the dev runs and on the game test servers (`cctweaked_version` in `versions/<node>/gradle.properties`).
 
 ## How to add …
 

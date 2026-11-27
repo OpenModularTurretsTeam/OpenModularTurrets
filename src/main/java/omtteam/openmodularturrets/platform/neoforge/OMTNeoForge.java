@@ -17,6 +17,7 @@ import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.compat.ModuleEnabledCondition;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
+import omtteam.openmodularturrets.platform.neoforge.computercraft.NeoForgeComputerCraft;
 import omtteam.openmodularturrets.platform.neoforge.opencomputers.OpenComputersCompat;
 import omtteam.omlib.platform.Platform;
 import omtteam.omlib.registry.RegistrationStep;
@@ -41,8 +42,12 @@ public final class OMTNeoForge {
         OMTStartup.init(NeoForgePlugins.find(OMTPlugin.Register.class, OMTPlugin.class, TurretRegistry.Plugin::new));
         modBus.addListener(this::onRegister);
         modBus.addListener(this::onCommonSetup);
-        modBus.addListener((RegisterCapabilitiesEvent event) ->
-                NeoForgeCapabilities.register(event, ModBlockEntities.transferTypes()));
+        modBus.addListener((RegisterCapabilitiesEvent event) -> {
+            NeoForgeCapabilities.register(event, ModBlockEntities.transferTypes());
+            if (Platform.loaderInfo().isModLoaded(NeoForgeComputerCraft.MOD_ID)) {
+                NeoForgeComputerCraft.register(event);
+            }
+        });
         modBus.addListener((RegisterPayloadHandlersEvent event) ->
                 ((NeoForgeNetwork) Platform.network()).applyRegistrations(event, OMT.MOD_ID));
         // lowest priority: mods that cancel the death have run, and cancelled deaths do not arrive here
@@ -63,7 +68,8 @@ public final class OMTNeoForge {
     /**
      * A step whose registry fired no event would leave its content unregistered: fail loudly instead. With Create
      * installed, its contraptions may move bases and turrets ({@link NeoForgeCreateMovement}); with OpenComputers:
-     * Rebooted installed, turret bases are components ({@code OpenComputersCompat}). Both classes are only loaded then.
+     * Rebooted installed, turret bases are components ({@code OpenComputersCompat}); with CC: Tweaked they are
+     * peripherals ({@code NeoForgeComputerCraft}, registered in the capability event). The classes are only loaded then.
      */
     private void onCommonSetup(FMLCommonSetupEvent event) {
         if (done.size() != steps.size()) {
