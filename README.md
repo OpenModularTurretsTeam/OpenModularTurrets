@@ -35,6 +35,8 @@ The other Minecraft versions have their own branches:
 - **Turret API for other mods:** add turrets with their own weapons, ammo, models and custom hit logic; see [docs/turret-api.md](docs/turret-api.md)
 - Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge build uses its energy capability (FE) instead
 - Optional **Jade** support for turret bases and turrets, on both loaders
+- Optional **CC: Tweaked** support (both loaders): turret bases are the peripheral `turret_base`, with the same functions as 1.12.2's computer callbacks, with a Serial Port addon or on tier 5
+- **Computer control** base: turret bases with a Serial Port addon (or on tier 5) accept computer commands, and a computer can aim and fire the turrets itself
 
 ## Requirements
 

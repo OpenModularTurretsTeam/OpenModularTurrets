@@ -35,6 +35,8 @@ Core gameplay:
   Jar-in-jar it (approved).
 - **Jade** (optional integration, `compat/jade/` for the server half and `client/compat/jade/` for the tooltips, registered through the `jade` entrypoint on Fabric and `@WailaPlugin` on NeoForge).
   Compile-only (`modCompileOnly`, Modrinth maven), never bundled and never required at runtime.
+- **CC: Tweaked** (`cc.tweaked`, from `maven.squiddev.cc`), on both nodes (approved by the user on 2026-11-27): compile-only against its `-api` jar, never bundled, an optional dependency in the loader metadata (`suggests` on Fabric, an optional dependency in `neoforge.mods.toml`); the full mod is in the dev runs (`modLocalRuntime` / `localRuntime`), on the game test servers and in `runenv`.
+  Gated on `cctweaked_version` in `versions/<node>/gradle.properties` (1.117.1, the only version for 1.21.11; its artifacts are named `fabric` and `forge` on that maven, the NeoForge jar is the `-forge` one); the code is loaded behind `isModLoaded("computercraft")`.
 - **NeoForge** 21.11.x, built with **ModDevGradle** (approved by the user; build-time only).
   On NeoForge, the Fabric-only APIs above are replaced by NeoForge's own (capabilities, events, payload registration); see §4 "Loaders".
 - **OpenModularCore** (the team's shared core, `../../OpenModularCore`, module `omt-core` from JitPack, approved by the user on 2026-11-16): the game rules (`omtteam.openmodularturrets.core`), the same on every Minecraft version; compile-only, its classes are bundled into the mod's jar (see "Core Game Logic Source").
@@ -231,7 +233,9 @@ The § numbers and headings of the moved sections are kept, so references such a
 
 - Every variant (base tier, ammo type, upgrade, addon) is an **individual registered block/item** with a lowercase snake_case ID.
   `docs/id-mapping.md` maps the 1.12.2 IDs to the current ones.
-- OpenComputers / ComputerCraft integration is **out of scope for now** (ask before adding).
+- Computers: the loader-free base is present: the commands in `core/computer` (`BaseComputerCommands`, a port of 1.12.2's, plus computer control), `TurretBaseBlockEntity.getTurret(face)`, `blockentity.base.BaseComputerTurrets`, `TurretBlockEntity.setYawPitch` / `setAutoFire` / `forceShot`, the Serial Port addon (`addon_serial_port`, 1.12.2 recipe and texture), `ComputerControlGameTests`.
+  **CC: Tweaked** is supported on both nodes (decided by the user, 2026-11-27): `compat/computercraft/TurretBasePeripheral` (one loader-free class, the peripheral `turret_base`, the same methods as the 1.12.2 callbacks) reuses `BaseComputerCommands`; only its registration is per loader (`platform/<loader>/computercraft`); `ComputerCraftGameTests` tests it.
+  OpenComputers (1.21.1 only) is **not present** here (ask before adding).
 
 ### Designing APIs
 

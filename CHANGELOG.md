@@ -10,6 +10,9 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 
 ### Added
 
+- Serial Port addon, with the recipe from 1.12.2 (quartz and I/O buses): lets computers use turret bases of tiers 2–4 (tier 5 bases accept them without it)
+- Computer control: `setComputerControl(true)` stops a base's turrets from targeting on their own, so a computer aims and fires them (`isComputerControl` tells whether it is on)
+- CC: Tweaked support: turret bases are the peripheral `turret_base`, with the computer commands of the Serial Port addon.
 - Turrets on a base with a damage amp addon show a small red light on each corner of their base plate
 - Config sections `upgrades` and `addons` switch each upgrade and addon off: it loses its recipe and does nothing in a machine, which shows it with a red slot frame, a "no" symbol over the icon and a red tooltip line
 - Range falloff (#539): turrets deal full damage up to a share of their range (`optimalRange`), then less down to `falloffDamage` at the end of the range; configurable per turret, off for the grenade, rocket, railgun and effect turrets

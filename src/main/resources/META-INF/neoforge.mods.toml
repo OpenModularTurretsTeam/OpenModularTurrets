@@ -41,3 +41,11 @@ type = "optional"
 versionRange = "*"
 ordering = "NONE"
 side = "BOTH"
+
+# CC: Tweaked: the turret base becomes a peripheral when it is installed
+[[dependencies.${mod_id}]]
+modId = "computercraft"
+type = "optional"
+versionRange = "*"
+ordering = "NONE"
+side = "BOTH"

@@ -18,6 +18,7 @@ import omtteam.openmodularturrets.block.misc.InventoryExpanderBlock;
 import omtteam.openmodularturrets.block.turret.TurretBlock;
 import omtteam.openmodularturrets.blockentity.base.BlockEntityBaseWorld;
 import omtteam.openmodularturrets.blockentity.base.TurretBaseNbt;
+import omtteam.openmodularturrets.blockentity.turret.TurretBlockEntity;
 import omtteam.omlib.camo.CamoData;
 import omtteam.omlib.camo.DisguiseRules;
 import omtteam.omlib.camo.CamoHost;
@@ -155,6 +156,19 @@ public class TurretBaseBlockEntity extends CompatBlockEntity implements CamoHost
 
     public int getTier() {
         return logic.getTier();
+    }
+
+    /**
+     * The turret block entity mounted on a face, if any: a turret next to the face that faces away from this base
+     * (like {@link #scanNeighbour}), in a loaded chunk.
+     */
+    public Optional<TurretBlockEntity> getTurret(Face face) {
+        if (level == null) return Optional.empty();
+        Direction direction = Direction.valueOf(face.name());
+        BlockPos pos = worldPosition.relative(direction);
+        if (!level.isLoaded(pos)) return Optional.empty();
+        return level.getBlockEntity(pos) instanceof TurretBlockEntity turret && turret.getFacing() == direction
+                ? Optional.of(turret) : Optional.empty();
     }
 
     /** What the attached inventory expanders add to the ammo slots ({@link TurretBaseLogic#getSlotCapacity}). */
