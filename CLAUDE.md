@@ -54,6 +54,8 @@ Core gameplay:
   The library is a mod of its own (`omlib`), declared as a required dependency in the mod metadata, and built as a nested step of the mod build, see §4 "OMLib".
 - **OpenComputers: Rebooted** (`li.cil.oc:opencomputers`, from `maven.michiyo.me`), on the **`1.21.1-neoforge` node only** (approved by the user on 2026-11-04): compile-only against its `api` jar, never bundled, an optional dependency in `neoforge.mods.toml`; the full mod (Scala bundled inside, so no ScalableCatsForce) is in the NeoForge dev runs (`localRuntime`), on the NeoForge game test server and in `runenv/1.21.1-neoforge`, all non-transitive (its POM lists Create, AE2 and others it does not require).
   Gated on `opencomputers_version`, which only `versions/1.21.1-neoforge/gradle.properties` has; the code is loaded behind `isModLoaded("opencomputers")`.
+- **CC: Tweaked** (`cc.tweaked`, from `maven.squiddev.cc`), on both nodes (approved by the user on 2026-11-27): compile-only against its `-api` jar, never bundled, an optional dependency in the loader metadata (`suggests` on Fabric, an optional dependency in `neoforge.mods.toml`); the full mod is in the dev runs (`modLocalRuntime` / `localRuntime`), on the game test servers and in `runenv`.
+  Gated on `cctweaked_version` in `versions/<node>/gradle.properties` (1.120.2: 1.121.0 needs NeoForge 21.1.265, 1.122.0 Loom 1.19); the code is loaded behind `isModLoaded("computercraft")`.
 - Nothing else without asking the user first.
   No Architectury, no Cloth Config, no Kotlin.
 
@@ -228,7 +230,7 @@ The § numbers and headings of the moved sections are kept, so references such a
 | `src/main/java/omtteam/openmodularturrets/api/` | the turret API (adding turrets) |
 | `src/main/java/omtteam/openmodularturrets/security/` | security and trusted players; ownership for adventure maps |
 | `src/main/java/omtteam/openmodularturrets/config/` | config (Gson, `@Comment` / `@Range`), config versions |
-| `src/main/java/omtteam/openmodularturrets/compat/` | the roadmap section "Sable contraptions" (poses, targeting in the plot frame, turret mount, Create movement, game tests) |
+| `src/main/java/omtteam/openmodularturrets/compat/` | the CC: Tweaked peripheral (`computercraft/`) and the roadmap section "Sable contraptions" (poses, targeting in the plot frame, turret mount, Create movement, game tests) |
 | `src/main/` | §5 "Resources strategy" (assets, datagen, no AI images) and the data decision (NeoForge converts the Fabric data) |
 | `src/client/java/omtteam/openmodularturrets/client/` | §6 client package layout, client compat helpers, client decisions, Jade |
 | `src/gametest/` | game tests: framework, scenes, fake players, the loader-neutral test decisions, API test turrets |
@@ -246,7 +248,7 @@ The § numbers and headings of the moved sections are kept, so references such a
 - Every variant (base tier, ammo type, upgrade, addon) is an **individual registered block/item** with a lowercase snake_case ID.
   `docs/id-mapping.md` maps the 1.12.2 IDs to the current ones.
 - Computers: **OpenComputers: Rebooted** is supported on `1.21.1-neoforge` only (the only node it exists for; added on 2026-11-04, decided by the user): the commands are loader-free in `core/computer` (`BaseComputerCommands`, a port of 1.12.2's, plus computer control), the OpenComputers driver and component are in `platform/neoforge/opencomputers` (see §6).
-  **ComputerCraft / CC: Tweaked** is still **out of scope** (ask before adding); a peripheral would reuse `BaseComputerCommands` as on 1.12.2.
+  **CC: Tweaked** is supported on both nodes (added on 2026-11-27, decided by the user): `compat/computercraft/TurretBasePeripheral` (one loader-free class, the peripheral `turret_base`, the same methods as the OpenComputers component) reuses `BaseComputerCommands`; only its registration is per loader (`platform/<loader>/computercraft`).
 
 ### Designing APIs
 

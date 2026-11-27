@@ -36,6 +36,7 @@ The other Minecraft versions have their own branches:
 - Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the NeoForge build uses its energy capability (FE) instead
 - Optional **Jade** support for turret bases and turrets, on both loaders
 - Optional **OpenComputers: Rebooted** support (NeoForge 1.21.1, the only version it exists for): turret bases are computer components, as on 1.12.2, with a Serial Port addon or on tier 5; computers can read and change targeting and trusted players and aim and fire the turrets themselves
+- Optional **CC: Tweaked** support (both loaders): turret bases are the peripheral `turret_base`, with the same functions as the OpenComputers component and 1.12.2
 
 ## Requirements
 

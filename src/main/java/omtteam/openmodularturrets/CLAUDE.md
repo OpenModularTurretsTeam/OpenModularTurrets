@@ -35,10 +35,11 @@ omtteam.openmodularturrets
 ├── menu/                        # TurretBaseMenu, GeneratorMenu
 ├── network/                     # OMTPackets, BasePackets + BasePacketHandler (C2S), RayPacket (S2C)
 ├── config/                      # self-written config (JSON via Gson, OMLib's machinery), no library
-├── compat/                      # SubLevelCompat (Sable), jade/ (server half); the porting helpers are in OMLib
+├── compat/                      # SubLevelCompat (Sable), jade/ (server half), computercraft/ (the CC: Tweaked peripheral turret_base); the porting helpers are in OMLib
 ├── mixin/                       # LivingEntityMixin
 ├── platform/                    # fabric/, neoforge/: entrypoints, services, adapters (each built for its loader only);
-│                                # neoforge/opencomputers: the OpenComputers: Rebooted driver and turret_base component
+│                                # neoforge/opencomputers: the OpenComputers: Rebooted driver and turret_base component;
+│                                # <loader>/computercraft: registers the CC: Tweaked peripheral
 └── datagen/                     # recipes, loot tables, tags, damage types (Fabric only)
 ```
 

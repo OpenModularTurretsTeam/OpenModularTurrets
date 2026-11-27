@@ -15,6 +15,7 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - Serial Port addon, with the recipe from 1.12.2 (quartz and I/O buses): lets computers use turret bases of tiers 2–4 (tier 5 bases accept them without it)
 - NeoForge 1.21.1 with OpenComputers: Rebooted: an Adapter next to a turret base offers it as the component `turret_base`, with the callbacks of 1.12.2 (targeting, trusted players, redstone mode, energy, turret aim, auto fire and forced shots)
 - Computer control: `setComputerControl(true)` stops a base's turrets from targeting on their own, so a computer aims and fires them (`isComputerControl` tells whether it is on)
+- CC: Tweaked support: turret bases are the peripheral `turret_base`, with the computer commands of the Serial Port addon.
 - Range falloff (#539): turrets deal full damage up to a share of their range (`optimalRange`), then less down to `falloffDamage` at the end of the range; configurable per turret, off for the grenade, rocket, railgun and effect turrets
 - Turret tracking (#539): turrets turn at most `turnRate` degrees per tick towards their target and fire only once their aim is within `turrets.aimTolerance` (default 5 degrees); configurable per turret, instant for the arc, slowing, teleporter and melee turrets
 - Computer control with the range falloff and turn rate (#539): a computer's aim (`setTurretYawPitch`, `setAllYawPitch`) is still set at once, and forced shots and auto fire do not wait for the aim, but their damage gets the range falloff

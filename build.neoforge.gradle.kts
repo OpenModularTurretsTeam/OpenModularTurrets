@@ -84,6 +84,11 @@ repositories {
         forRepository { maven("https://maven.michiyo.me/releases/") { name = "OpenComputers" } }
         filter { includeGroup("li.cil.oc") }
     }
+    // CC: Tweaked comes only from its own maven
+    exclusiveContent {
+        forRepository { maven("https://maven.squiddev.cc") { name = "CC-Tweaked" } }
+        filter { includeGroup("cc.tweaked") }
+    }
 }
 
 dependencies {
@@ -145,6 +150,17 @@ dependencies {
         localRuntime("li.cil.oc:opencomputers:$oc") { isTransitive = false }
         "gametestCompileOnly"("li.cil.oc:opencomputers:$oc:api") { isTransitive = false }
         "gametestRuntimeOnly"("li.cil.oc:opencomputers:$oc") { isTransitive = false }
+    }
+
+    // CC: Tweaked: the turret base peripheral (compat/computercraft, platform/neoforge/computercraft) compiles against
+    // its API jars, never bundled, only used when CC: Tweaked is installed; the full mod is in the dev runs and on the
+    // GameTest server for its test.
+    (findProperty("cctweaked_version") as String?)?.let { cc ->
+        val mc = property("minecraft_version")
+        compileOnly("cc.tweaked:cc-tweaked-$mc-forge-api:$cc")
+        localRuntime("cc.tweaked:cc-tweaked-$mc-forge:$cc")
+        "gametestCompileOnly"("cc.tweaked:cc-tweaked-$mc-forge-api:$cc")
+        "gametestRuntimeOnly"("cc.tweaked:cc-tweaked-$mc-forge:$cc")
     }
 }
 // The client half of the Jade plugin (client/compat/jade) compiles against it too, as with Loom's client source set

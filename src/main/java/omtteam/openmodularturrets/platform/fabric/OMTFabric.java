@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
+import omtteam.openmodularturrets.platform.fabric.computercraft.FabricComputerCraft;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.registry.ModBlockEntities;
 import omtteam.openmodularturrets.startup.OMTStartup;
@@ -23,6 +24,9 @@ public final class OMTFabric implements ModInitializer {
         OMTStartup.registrationSteps().forEach(step -> step.register().run());
         FabricBlockLookups.register(ModBlockEntities.transferTypes());
         FabricModuleEnabledCondition.register();
+        if (FabricLoader.getInstance().isModLoaded(FabricComputerCraft.MOD_ID)) {
+            FabricComputerCraft.register();
+        }
         ServerLivingEntityEvents.AFTER_DEATH.register(KillCounter::onDeath);
     }
 
