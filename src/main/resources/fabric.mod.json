@@ -39,7 +39,8 @@
     }
   ],
   "suggests": {
-    "jade": "*"
+    "jade": "*",
+    "computercraft": "*"
   },
   "depends": {
     "fabricloader": ">=${loader_version}",

@@ -72,6 +72,14 @@ configurations.runtimeClasspath { extendsFrom(localRuntime) }
 // Not on the GameTest server: Jade there sends its ping to the vanilla mock players of the tests, which NeoForge
 // refuses (no negotiated channels).
 
+// CC: Tweaked comes only from its own maven
+repositories {
+    exclusiveContent {
+        forRepository { maven("https://maven.squiddev.cc") { name = "CC-Tweaked" } }
+        filter { includeGroup("cc.tweaked") }
+    }
+}
+
 dependencies {
     // OMLib (git submodule omlib, built by :buildOmlib): a mod of its own, jar-in-jar. The client and game test source
     // sets only see main's classes, not its dependencies.
@@ -91,6 +99,17 @@ dependencies {
     // Jade plugin (compat/jade, client/compat/jade): optional, not bundled; present in dev runs to try it
     compileOnly("maven.modrinth:jade:${property("jade_version")}")
     localRuntime("maven.modrinth:jade:${property("jade_version")}")
+
+    // CC: Tweaked: the turret base peripheral (compat/computercraft, platform/neoforge/computercraft) compiles against
+    // its API jars, never bundled, only used when CC: Tweaked is installed; the full mod is in the dev runs and on the
+    // GameTest server for its test (its artifacts are named -forge on the CC maven).
+    (findProperty("cctweaked_version") as String?)?.let { cc ->
+        val mc = property("minecraft_version")
+        compileOnly("cc.tweaked:cc-tweaked-$mc-forge-api:$cc")
+        localRuntime("cc.tweaked:cc-tweaked-$mc-forge:$cc")
+        "gametestCompileOnly"("cc.tweaked:cc-tweaked-$mc-forge-api:$cc")
+        "gametestRuntimeOnly"("cc.tweaked:cc-tweaked-$mc-forge:$cc")
+    }
 }
 // The client half of the Jade plugin (client/compat/jade) compiles against it too, as with Loom's client source set
 configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }

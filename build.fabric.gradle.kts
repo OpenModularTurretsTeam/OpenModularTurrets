@@ -63,6 +63,14 @@ tasks.withType<net.fabricmc.loom.task.AbstractRunTask>().configureEach {
     doFirst { clientResources.get().asFile.mkdirs() }
 }
 
+// CC: Tweaked comes only from its own maven
+repositories {
+    exclusiveContent {
+        forRepository { maven("https://maven.squiddev.cc") { name = "CC-Tweaked" } }
+        filter { includeGroup("cc.tweaked") }
+    }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings(loom.officialMojangMappings())
@@ -78,6 +86,14 @@ dependencies {
 
     // Jade tooltips (optional, not bundled: the mod only registers the plugin when Jade is installed)
     modCompileOnly("maven.modrinth:jade:${property("jade_version")}")
+
+    // CC: Tweaked (optional, not bundled: the peripheral in compat/computercraft is only registered when it is
+    // installed): its API compile-only, the full mod in the dev runs and on the game test server for the peripheral test
+    findProperty("cctweaked_version")?.let { cc ->
+        val mc = property("minecraft_version")
+        modCompileOnly("cc.tweaked:cc-tweaked-$mc-fabric-api:$cc")
+        modLocalRuntime("cc.tweaked:cc-tweaked-$mc-fabric:$cc")
+    }
 
     // Architecture rules (src/test/.../architecture): they read the compiled main and client classes
     testImplementation("com.tngtech.archunit:archunit-junit5:${property("archunit_version")}")

@@ -20,12 +20,13 @@ omtteam.openmodularturrets
 │   └── misc/                    # crank (LeverBlock), generator, inventory expanders
 ├── blockentity/
 │   ├── TurretBaseBlockEntity    # forwards to core.base.TurretBaseLogic; inventory, energy, trust list
-│   ├── base/                    # adapters to core (BlockEntityBaseWorld, ContainerItemSlot, LivingTargetEntity)
+│   ├── base/                    # adapters to core (BlockEntityBaseWorld, ContainerItemSlot, LivingTargetEntity), BaseComputerTurrets
 │   ├── turret/                  # TurretBlockEntity (one type for all turrets), TurretMount, RayWeapons, EffectWeapons
 │   ├── defense/                 # PassiveDefenseBlockEntity, CamoTrapBlockEntity
 │   └── misc/                    # GeneratorBlockEntity, LeverBlockEntity
 ├── core/                        # (from OpenModularCore, omt-core; bundled, not in src/) game rules without Minecraft:
-│                                # base, turret, target, security (DamageRules), generator, card, item, settings, storage, world
+│                                # base, turret, target, security (DamageRules), generator, card, item, settings, storage, world,
+│                                # computer (BaseComputerCommands, the computer commands of 1.12.2; ComputerTurrets, PlayerNames)
 ├── camo/                        # CamoRules, CamoLightProperties (CamoHost, CamoData and the menu are in OMLib)
 ├── security/                    # OMTOwnershipSettings (trust lists, access levels and claiming are in OMLib)
 ├── inventory/                   # TurretBaseInventory, FuelContainer, AmmoRules
@@ -35,9 +36,10 @@ omtteam.openmodularturrets
 ├── network/                     # OMTPackets, BasePackets + BasePacketHandler (C2S), RayPacket (S2C)
 ├── config/                      # self-written config (JSON via Gson, OMLib's machinery), no library
 ├── turret/                      # TurretStatLines (range falloff and turn rate lines for tooltips and Jade)
-├── compat/                      # ModuleEnabledCondition, SubLevelCompat (contraption poses, always the identity pose here), jade/ (server half); the porting helpers are in OMLib
+├── compat/                      # ModuleEnabledCondition, SubLevelCompat (contraption poses, always the identity pose here), jade/ (server half), computercraft/ (the CC: Tweaked peripheral turret_base); the porting helpers are in OMLib
 ├── mixin/                       # LivingEntityMixin
-├── platform/                    # fabric/, neoforge/: entrypoints, services, adapters (each built for its loader only)
+├── platform/                    # fabric/, neoforge/: entrypoints, services, adapters (each built for its loader only);
+│                                # <loader>/computercraft: registers the CC: Tweaked peripheral
 └── datagen/                     # recipes, loot tables, tags, damage types (Fabric only)
 ```
 

@@ -64,6 +64,7 @@ This is the only place where the two meet, and the reason the core can be tested
 | `item.ItemSlot` | `blockentity.base.ContainerItemSlot` | one inventory slot: count, what the item is (ammo, upgrade, addon, fuel), extract |
 | `target.TargetEntity` | `blockentity.base.LivingTargetEntity` | one living entity: position and eyes (in the base's coordinates), health, armor, category, owner (pets) |
 | `settings.LogicSettings` | `config.ConfigLogicSettings` | config values (turret stats, base tiers, entity lists) |
+| `computer.ComputerTurrets` | `blockentity.base.BaseComputerTurrets` | the turrets on a base's faces: aim, auto fire, forced shot |
 | `security.SecurityEnvironment` (OMLib) | `security.LevelSecurityEnvironment` (OMLib, with `OMTOwnershipSettings`) | scoreboard teams, operator rights |
 
 All positions the core sees are in the base's coordinates.
@@ -106,6 +107,7 @@ Packages below `omtteam.openmodularturrets` (main):
 | `core.target` | `TargetSelector`: who is a valid target and who is the best one |
 | `core.security` | `DamageRules` (who turret damage may hit); the owner, trusted players and access levels (`TrustManager`) are in OMLib |
 | `core.generator`, `core.card` | generator burning, the memory card's copy rules for a base's settings (`BaseCardRules`; the card data and the trust list copy rules are OMLib's `core.card`, camouflage permissions OMLib's `core.camo`, machine mode and targeting settings OMLib's `core.machine`) |
+| `core.computer` | `BaseComputerCommands`: the commands a computer may send to a turret base (1.12.2's, plus computer control), with the interfaces it needs from the game |
 | `core.item`, `core.settings`, `core.world` | upgrade/addon types, config value types, the world interfaces above |
 | `core.storage` | `SlotCapacity`: how much an ammo or fuel slot holds with the attached inventory expanders; `AmmoSort`: the order of the sort button (`TurretBaseInventory.sortAmmo`) |
 | `api`, `api.weapon` | public turret API for other mods; the built-in turrets use it too |
@@ -118,8 +120,8 @@ Packages below `omtteam.openmodularturrets` (main):
 | `network` | packets: client→server requests (always re-validated) and server→client sync (OMLib's `ConfigSync` sends the configs on join) |
 | `config` | the JSON config: fields, comments, ranges, migration, the server's config on clients |
 | `security`, `camo` | the mod's ownership rules (`OMTOwnershipSettings`); the trust lists' Minecraft side (NBT, player lookup) is in OMLib, and camouflage rules |
-| `compat` | the porting helpers that keep call sites identical on the version branches (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge`), Jade (server half here, tooltips in `client.compat.jade`), and the contraption pose hooks (`SubLevelCompat`, `client.compat.ClientSubLevelCompat`; always the identity pose here, as there is no Sable) |
-| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader |
+| `compat` | the porting helpers that keep call sites identical on the version branches (`VersionCompat`, `CompatBlockEntity`, networking, menus; `compat.nbt.NbtCompat` for all NBT reads and `compat.block.BlockCompat` depend on Minecraft only, so any package may use them), small loader differences (`//? if fabric` / `neoforge`), Jade (server half here, tooltips in `client.compat.jade`), the CC: Tweaked peripheral (`compat.computercraft`), and the contraption pose hooks (`SubLevelCompat`, `client.compat.ClientSubLevelCompat`; always the identity pose here, as there is no Sable) |
+| `platform` | the loader services shared code calls (`Platform`: `LoaderInfo`, `Fuel`, `Network`, `Menus`, `Energy`); `platform.fabric` / `platform.neoforge` hold the entrypoints, the implementations and the energy/item adapters, and only compile for their loader; `platform.<loader>.computercraft` registers the CC: Tweaked peripheral |
 | `datagen` | recipes, loot tables, tags, damage types (Fabric only; the NeoForge build converts the Fabric output) |
 
 `./gradlew dependencyMap` draws these packages and every import between them as an interactive page.
@@ -215,6 +217,22 @@ A slot holds `itemMaxStackSize × base stacks × (1 + Σ stacks)`: a turret base
 The base learns of its expanders through `Neighbour.Expanders` in `TurretBaseLogic.updateNeighbours`, the generator scans them itself, both on their neighbour updates.
 The stacks above one stack are OMLib's large stacks: `TurretBaseInventory` and `FuelContainer` implement `LargeStackContainer` (also on the client, with the bonus stacks synced as menu data), the menus extend `LargeStackMenu` with `LargeStackSlot`s, the screens `LargeStackScreen`, and `VersionCompat.saveItems` saves the counts.
 Removing an expander leaves larger stacks in the slots; they only cannot grow until they are below the new limit.
+
+### Computers
+
+A computer reaches a turret base through these layers; this version has all three, for CC: Tweaked:
+
+1. `core.computer.BaseComputerCommands` holds the commands (1.12.2's, ported with their names, arguments and messages): plain Java values in, an `Object[]` result out, a wrong argument gives an error message, not an exception.
+   Every command first asks `TurretBaseLogic.acceptsComputers()` (tier 5, or a Serial Port addon); trust changes act as the base's owner through its `TrustManager`, which saves and syncs.
+   The turrets are reached through `ComputerTurrets` (`blockentity.base.BaseComputerTurrets` over the turrets mounted on the base), player names through `PlayerNames` (the integration provides it).
+2. Computer control (`setComputerControl`, `TurretBaseLogic.isComputerControlled()`, saved with the base): the base drops its targets and searches none, and its turrets stay deployed and fire only when told to (`TurretBlockEntity.setYawPitch`, `setAutoFire`, `forceShot`; forced shots ignore the turn rate).
+   Control and auto fire only apply while the base accepts computers (tier 5 or a Serial Port): a base that lost its Serial Port targets on its own again, since no computer could switch control off.
+3. The mod integration: **CC: Tweaked** (both loaders, `compat.computercraft`).
+   `TurretBasePeripheral` is the peripheral `turret_base`, one class for both loaders; its `@LuaFunction(mainThread = true)` methods have the names of 1.12.2's callbacks (`changeAccessLevel` and `forceShootAllTurrets` as well) and call the commands, so CC runs them on the server thread.
+   Only the registration is per loader, and only when `computercraft` is loaded: `platform.fabric.computercraft.FabricComputerCraft` (`PeripheralLookup`) and `platform.neoforge.computercraft.NeoForgeComputerCraft` (`PeripheralCapability`, in `RegisterCapabilitiesEvent`).
+   `ServerPlayerNames` (the `PlayerNames` of the peripheral) reads the server's `usercache.json` itself, as the profile cache has no lookup that never asks Mojang.
+   CC: Tweaked is compile-only (its API from `maven.squiddev.cc`, never bundled), and the full mod runs in the dev runs and on the game test servers (`cctweaked_version` in `versions/<node>/gradle.properties`).
+   OpenComputers has no integration here (it exists for NeoForge 1.21.1 only).
 
 ## How to add …
 

@@ -482,7 +482,7 @@ public class ConfigData {
         @Comment("Fake drops addon.")
         public boolean fakeDrops = true;
 
-        /** Whether the addon works and can be crafted; addons without an item have no switch. */
+        /** Whether the addon works and can be crafted; the serial port has no switch (it only lets computers in). */
         public boolean isEnabled(AddonType type) {
             return switch (type) {
                 case CONCEALER -> concealer;
