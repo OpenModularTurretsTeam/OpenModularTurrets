@@ -5,7 +5,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Marker;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -37,6 +39,8 @@ import java.util.Optional;
 public final class RayWeapons {
     /** 1.12.2 {@code blockRange} when nothing was hit. */
     private static final double NO_BLOCK_HIT = 500;
+    /** 1.12.2 {@code RayTracingTurret.forceShot}: forced rays scatter like a shot at a target one block high. */
+    private static final double FORCED_TARGET_HEIGHT = 1.0D;
 
     private RayWeapons() {
     }
@@ -57,19 +61,51 @@ public final class RayWeapons {
         if (!(turret.getLevel() instanceof ServerLevel level)) {
             return;
         }
+        shoot(level, turret, base, weapon, new Vec3(target.getX(), target.getEyeY(), target.getZ()),
+                target.getBbHeight(), target, origin, renderOrigin);
+    }
+
+    /**
+     * 1.12.2 {@code RayTracingTurret.forceShot}: a ray without a target (computer control,
+     * {@link TurretBlockEntity#forceShot()}), scattered like a shot at a target one block high at {@code end}.
+     * Energy and ammo are already consumed.
+     *
+     * @param end          the aim point, a few blocks in front of the turret
+     * @param renderOrigin where a hit is drawn from if the weapon {@linkplain RayWeapon#drawFromTip() draws from the tip}
+     */
+    static void shoot(TurretBlockEntity turret, TurretBaseBlockEntity base, RayWeapon weapon, Vec3 end, Vec3 origin,
+                      Vec3 renderOrigin) {
+        if (!(turret.getLevel() instanceof ServerLevel level)) {
+            return;
+        }
+        // the block trace needs an entity as collision context (1.20.1 has no entity-less one); a marker at the
+        // turret behaves like none
+        Marker context = new Marker(EntityType.MARKER, level);
+        context.setPos(origin);
+        shoot(level, turret, base, weapon, end, FORCED_TARGET_HEIGHT, context, origin, renderOrigin);
+    }
+
+    /**
+     * The rays of one shot towards {@code aim}.
+     *
+     * @param targetHeight height of the target, for the scatter of small targets
+     * @param context      the collision context of the block trace (the target)
+     */
+    private static void shoot(ServerLevel level, TurretBlockEntity turret, TurretBaseBlockEntity base,
+                              RayWeapon weapon, Vec3 aim, double targetHeight, Entity context, Vec3 origin,
+                              Vec3 renderOrigin) {
         TurretType type = turret.getTurretType();
         TurretBaseLogic logic = base.getLogic();
         double accuracy = logic.getAccuracyDeviation(type);
-        Vec3 aim = new Vec3(target.getX(), target.getEyeY(), target.getZ());
         for (int i = 0; i <= logic.getScattershotCount(type); i++) {
-            double scale = ProjectileMath.raySpread(accuracy, target.getBbHeight(), aim.distanceTo(origin), logic.getRange(type));
+            double scale = ProjectileMath.raySpread(accuracy, targetHeight, aim.distanceTo(origin), logic.getRange(type));
             Vec3 end = aim.add(level.random.nextGaussian() * scale, level.random.nextGaussian() * scale,
                     level.random.nextGaussian() * scale);
             Vec3 start = origin.add(end.subtract(origin).normalize().scale(0.8D));
             playSound(level, turret.getBlockPos(), weapon.launchSound());
 
             BlockHitResult blockHit = level.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE, target));
+                    ClipContext.Fluid.NONE, context));
             double blockRange = blockHit.getType() == HitResult.Type.BLOCK ? blockHit.getLocation().distanceTo(start) : NO_BLOCK_HIT;
 
             Entity hit = null;

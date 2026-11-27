@@ -18,6 +18,9 @@ Before a release, `./gradlew releaseChangelog` turns *Unreleased* into the relea
 - The turret item tooltip (with shift) and the Jade tooltip of a turret show its optimal range and its turn rate
 - Turret API: `TurretStats.Builder.falloff(optimalShare, damageAtMaxRange)` and `turnRate(degreesPerTick)`; `TurretProjectile` has `damage(Entity)`, `damage(float, Entity)`, `damageFactor(…)`, `ampDamage(…)` and `hitPoint(…)` for projectiles with the range falloff
 - Config: `turrets.aimTolerance` and, in every turret section, `optimalRange`, `falloffDamage` and `turnRate`
+- Serial Port addon, with the recipe from 1.12.2 (quartz and I/O buses): lets computers use turret bases of tiers 2–4 (tier 5 bases accept them without it)
+- Computer control: a computer can stop a base's turrets from targeting on their own, so it aims and fires them itself
+- CC: Tweaked support: turret bases are the peripheral `turret_base`, with the computer commands of the Serial Port addon.
 
 ### Changed
 

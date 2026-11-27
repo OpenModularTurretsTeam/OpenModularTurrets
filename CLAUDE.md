@@ -43,6 +43,8 @@ Core gameplay:
 - **MixinExtras** (`io.github.llamalad7:mixinextras-forge`), jar-in-jar in the **Forge jar only** (approved by the user on 2026-10-24): Fabric Loader ships it, Forge 1.20.1 does not, and `LivingEntityMixin` needs it.
 - **OpenModularCore** (the team's shared core, `../../OpenModularCore`, module `omt-core` from JitPack, approved by the user on 2026-11-16): the game rules (`omtteam.openmodularturrets.core`), the same on every Minecraft version; compile-only, its classes are bundled into the mod's jar (see "Core Game Logic Source").
 - **OMLib** (the user's own library, `../OMLib`, branch `1.20.1`), mounted as the git submodule `omlib` and bundled into every jar (jar-in-jar; requested by the user on 2026-10-27); see §4 "OMLib".
+- **CC: Tweaked** (`cc.tweaked`, from `maven.squiddev.cc`), on both nodes (approved by the user on 2026-11-27): compile-only against its `-api` jar (on Forge also `-core-api`, as its `-forge-api` module lists no dependencies), never bundled, an optional dependency in the loader metadata (`suggests` on Fabric, an optional dependency in `mods.toml`); the full mod is in the dev runs (`modLocalRuntime`), on the game test servers and in `runenv`.
+  Gated on `cctweaked_version` in `versions/<node>/gradle.properties` (1.121.0: 1.122.0 needs Loom 1.19, this branch has 1.18); the code is loaded behind `isModLoaded("computercraft")`.
 - Nothing else without asking the user first.
   No Architectury, no Cloth Config, no Kotlin.
 
@@ -223,7 +225,8 @@ The § numbers and headings of the moved sections are kept, so references such a
 
 - Every variant (base tier, ammo type, upgrade, addon) is an **individual registered block/item** with a lowercase snake_case ID.
   `docs/id-mapping.md` maps the 1.12.2 IDs to the current ones.
-- OpenComputers / ComputerCraft integration is **out of scope** on this branch (OpenComputers: Rebooted belongs to `1.21.1` only; ask before adding).
+- Computers: the loader-free base is present (the commands in `core/computer`, `BaseComputerCommands`, a port of 1.12.2's plus computer control; computer control of a base and its turrets, `blockentity/base/BaseComputerTurrets`; the Serial Port addon, `addon_serial_port`), and **CC: Tweaked** is supported on both nodes (added on 2026-11-27, decided by the user): `compat/computercraft/TurretBasePeripheral` (one loader-free class, the peripheral `turret_base`) reuses `BaseComputerCommands`; only its registration is per loader (`platform/<loader>/computercraft`: `PeripheralLookup` on Fabric, `ForgeComputerCraftAPI.registerPeripheralProvider` on Forge).
+  OpenComputers: Rebooted belongs to `1.21.1` only.
 - New APIs (public interfaces for other mods, such as `api/`, and new cross-cutting interfaces inside the mod) are designed step by step with the user: workspace `CLAUDE.md`, "Designing APIs".
 
 ---

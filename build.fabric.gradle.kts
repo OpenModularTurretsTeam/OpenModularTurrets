@@ -65,6 +65,14 @@ tasks.withType<net.fabricmc.loom.task.AbstractRunTask>().configureEach {
     doFirst { clientResources.get().asFile.mkdirs() }
 }
 
+repositories {
+    // CC: Tweaked comes only from its own maven
+    exclusiveContent {
+        forRepository { maven("https://maven.squiddev.cc") { name = "CC-Tweaked" } }
+        filter { includeGroup("cc.tweaked") }
+    }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings(loom.officialMojangMappings())
@@ -80,6 +88,13 @@ dependencies {
 
     // Jade tooltips (optional, not bundled: the mod only registers the plugin when Jade is installed)
     modCompileOnly("maven.modrinth:jade:${property("jade_version")}")
+
+    // CC: Tweaked (optional, not bundled: the peripheral in compat/computercraft is only registered when it is
+    // installed): its API compile-only, the full mod in the dev runs and on the game test server for the peripheral test
+    findProperty("cctweaked_version")?.let { cc ->
+        modCompileOnly("cc.tweaked:cc-tweaked-$minecraftVersion-fabric-api:$cc")
+        modLocalRuntime("cc.tweaked:cc-tweaked-$minecraftVersion-fabric:$cc")
+    }
 
     // NEEPMeat: OMLib's FabricNeepMeatPower lets its vascular network charge the bases. Not bundled, the mod needs
     // nothing of it; NEEPMeat (with the mods nested in its jar, which Loom leaves out of its remapped copy:

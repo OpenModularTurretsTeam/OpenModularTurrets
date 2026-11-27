@@ -7,6 +7,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -15,6 +16,7 @@ import net.minecraftforge.registries.RegisterEvent;
 import omtteam.openmodularturrets.OMT;
 import omtteam.openmodularturrets.api.OMTPlugin;
 import omtteam.openmodularturrets.entity.projectile.KillCounter;
+import omtteam.openmodularturrets.platform.forge.computercraft.ForgeComputerCraft;
 import omtteam.omlib.registry.RegistrationStep;
 import omtteam.openmodularturrets.registry.TurretRegistry;
 import omtteam.openmodularturrets.startup.OMTStartup;
@@ -68,11 +70,17 @@ public final class OMTForge {
         }
     }
 
-    /** A step whose registry fired no event would leave its content unregistered: fail loudly instead. */
+    /**
+     * A step whose registry fired no event would leave its content unregistered: fail loudly instead. With CC: Tweaked
+     * installed, turret bases are peripherals ({@code ForgeComputerCraft}, only loaded then).
+     */
     private void onCommonSetup(FMLCommonSetupEvent event) {
         if (done.size() != steps.size()) {
             List<RegistrationStep> missing = steps.stream().filter(step -> !done.contains(step)).toList();
             throw new IllegalStateException("Registration steps never ran: " + missing);
+        }
+        if (ModList.get().isLoaded(ForgeComputerCraft.MOD_ID)) {
+            event.enqueueWork(ForgeComputerCraft::register);
         }
     }
 

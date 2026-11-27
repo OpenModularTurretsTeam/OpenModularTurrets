@@ -40,7 +40,8 @@
   ],
   "suggests": {
     "jade": "*",
-    "neepmeat": "*"
+    "neepmeat": "*",
+    "computercraft": "*"
   },
   "depends": {
     "fabricloader": ">=${loader_version}",

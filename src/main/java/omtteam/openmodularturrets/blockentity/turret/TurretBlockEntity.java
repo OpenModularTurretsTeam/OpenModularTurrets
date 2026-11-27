@@ -63,6 +63,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private static final float CLIENT_TURN_RATE = 0.5F;
     /** Degrees the melee turret's top piece turns per tick while active. */
     private static final float CLIENT_SPIN_RATE = 36.0F;
+    /** 1.12.2 {@code RayTracingTurret.forceShot}: forced shots aim at the point 5 blocks along the aim. */
+    private static final double FORCED_SHOT_DISTANCE = 5D;
 
     /** Cooldown and concealment (see {@link TurretState}). */
     private final TurretState state = new TurretState();
@@ -74,6 +76,8 @@ public class TurretBlockEntity extends CompatBlockEntity {
     private float syncedPitch;
     private int ticksSinceSync;
     private boolean active;
+    /** 1.12.2 {@code autoFire}: fire along the aim whenever ready (computer control); saved, not synced. */
+    private boolean autoFire;
     /** Whether the base has a damage amp addon; synced to clients (the turret shows its damage amp LEDs). */
     private boolean damageAmp;
 
@@ -175,19 +179,26 @@ public class TurretBlockEntity extends CompatBlockEntity {
         turret.ticksSinceSync++;
         TurretBaseLogic logic = base.get().getLogic();
         boolean engaging = false;
-        if (logic.isActive() && turret.getWeapon() instanceof AreaWeapon area) {
+        if (!logic.isActive()) {
+            turret.forgetTarget();
+        } else if (logic.isComputerControlled()) {
+            turret.computerControlledTick(logic, type);
+        } else if (turret.getWeapon() instanceof AreaWeapon area) {
             engaging = turret.strikeInReach((ServerLevel) level, base.get(), area);
-        } else if (logic.isActive() && turret.getWeapon() instanceof SelfTargetingWeapon weapon) {
+        } else if (turret.getWeapon() instanceof SelfTargetingWeapon weapon) {
             engaging = turret.pickAndFire((ServerLevel) level, base.get(), weapon);
-        } else if (logic.isActive()) {
+        } else {
             Optional<Entity> target = logic.getTarget(turret.getFace())
                     .filter(LivingTargetEntity.class::isInstance)
                     .map(t -> ((LivingTargetEntity) t).getEntity());
             turret.updateConcealment(logic, target.isPresent());
             target.ifPresentOrElse(turret::engage, turret::forgetTarget);
             engaging = target.isPresent();
-        } else {
-            turret.forgetTarget();
+            // 1.12.2 AbstractDirectedTurret.update: without a target, auto fire shoots along the aim (only while the
+            // base accepts computers, which could switch it off again)
+            if (target.isEmpty() && turret.autoFire && logic.acceptsComputers() && turret.state.isReady(logic, type)) {
+                turret.forceShot();
+            }
         }
         boolean amped = logic.getDamageAmpLevel() > 0;
         if (engaging != turret.active || amped != turret.damageAmp) {
@@ -196,6 +207,19 @@ public class TurretBlockEntity extends CompatBlockEntity {
             turret.syncToClient();
         }
         turret.syncAimIfChanged();
+    }
+
+    /**
+     * A computer controls the turrets ({@link TurretBaseLogic#isComputerControlled()}): no weapon looks for targets,
+     * the turret stays deployed and only fires along its aim, with {@linkplain #isAutoFire() auto fire} whenever it
+     * is ready (or through {@link #forceShot()}).
+     */
+    private void computerControlledTick(TurretBaseLogic logic, TurretType type) {
+        forgetTarget();
+        updateConcealment(logic, true);
+        if (autoFire && state.isReady(logic, type)) {
+            forceShot();
+        }
     }
 
     /**
@@ -245,15 +269,20 @@ public class TurretBlockEntity extends CompatBlockEntity {
             fire(toBody, velocity, target);
         } else if (weapon instanceof RayWeapon ray) {
             Optional<TurretBaseBlockEntity> base = beginShot();
-            if (base.isPresent()) {
-                // rays start 0.1 blocks above the turret centre, the arc is drawn from its tip
-                Vec3 origin = centre.add(mount.up().scale(0.1D));
-                Vec3 tip = centre.add(mount.up().scale(0.5D));
-                RayWeapons.shoot(this, base.get(), ray, target, origin, tip);
-            }
+            base.ifPresent(shooter -> RayWeapons.shoot(this, shooter, ray, target, rayOrigin(mount), rayTip(mount)));
         } else if (weapon instanceof EffectWeapon effect) {
             beginShot().ifPresent(base -> EffectWeapons.fireEffect(this, base, effect, target));
         }
+    }
+
+    /** Rays start 0.1 blocks above the turret centre (in the world). */
+    private static Vec3 rayOrigin(TurretMount mount) {
+        return mount.centre().add(mount.up().scale(0.1D));
+    }
+
+    /** The tip of the turret, where the arc is drawn from (in the world). */
+    private static Vec3 rayTip(TurretMount mount) {
+        return mount.centre().add(mount.up().scale(0.5D));
     }
 
     /**
@@ -468,6 +497,64 @@ public class TurretBlockEntity extends CompatBlockEntity {
         return true;
     }
 
+    // ---- Computer control (1.12.2 3.x API, used by the computer commands) ----
+
+    /**
+     * Aims the turret; the angles are relative to the face ({@link TurretMath}), in degrees, and clamped by
+     * {@link TurretMath#limit}. Clients see the new aim within {@link #SYNC_INTERVAL} ticks. While the base has a
+     * target for this turret, the turret turns back to it. Any angles work (a pitch of 270 is -90, which the limit
+     * then raises); non-finite ones are ignored.
+     */
+    public void setYawPitch(float yaw, float pitch) {
+        if (!Float.isFinite(yaw) || !Float.isFinite(pitch)) return;
+        // through the direction, so the limit sees the yaw in (-180, 180] and the pitch in [-90, 90]
+        Face face = getFace();
+        TurretMath.Angles angles = TurretMath.limit(
+                TurretMath.anglesFor(face, TurretMath.direction(face, new TurretMath.Angles(yaw, pitch))));
+        this.yaw = angles.yaw();
+        this.pitch = angles.pitch();
+        setChanged();
+    }
+
+    /** Whether the turret fires along its aim whenever it is ready (1.12.2 {@code autoFire}); saved, not synced. */
+    public boolean isAutoFire() {
+        return autoFire;
+    }
+
+    /** See {@link #isAutoFire()}. */
+    public void setAutoFire(boolean autoFire) {
+        if (this.autoFire != autoFire) {
+            this.autoFire = autoFire;
+            setChanged();
+        }
+    }
+
+    /**
+     * 1.12.2 {@code forceShot}: one shot along the current aim, at the point {@link #FORCED_SHOT_DISTANCE} blocks
+     * ahead (on a contraption along the turned aim). Only projectile and ray turrets can do that; the shot needs the
+     * cooldown to have passed, energy, ammo and an active base, like any other.
+     *
+     * @return whether it fired (always false on the client)
+     */
+    public boolean forceShot() {
+        if (!(level instanceof ServerLevel)) return false;
+        TurretWeapon weapon = getWeapon();
+        if (!(weapon instanceof ProjectileWeapon) && !(weapon instanceof RayWeapon)) return false;
+        TurretMount mount = getMount();
+        // the aim is relative to the face in the plot; the contraption's pose turns it into the world
+        Vector3 aim = mount.pose().directionToWorld(TurretMath.direction(getFace(), new TurretMath.Angles(yaw, pitch)));
+        Vector3 toAim = aim.scale(FORCED_SHOT_DISTANCE / aim.length());
+        if (weapon instanceof ProjectileWeapon) {
+            return fire(toAim, Vector3.ZERO, null);
+        }
+        Optional<TurretBaseBlockEntity> base = beginShot();
+        if (base.isEmpty()) return false;
+        Vec3 origin = rayOrigin(mount);
+        RayWeapons.shoot(this, base.get(), (RayWeapon) weapon, origin.add(TurretMount.toVec3(toAim)), origin,
+                rayTip(mount));
+        return true;
+    }
+
     private void playSound(SoundEvent sound) {
         if (level != null) {
             level.playSound(null, worldPosition, sound, SoundSource.BLOCKS,
@@ -537,6 +624,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
         yaw = NbtCompat.getFloat(tag, "Yaw", 0);
         pitch = NbtCompat.getFloat(tag, "Pitch", 0);
         active = NbtCompat.getBoolean(tag, "Active", false);
+        autoFire = NbtCompat.getBoolean(tag, "AutoFire", false);
         damageAmp = NbtCompat.getBoolean(tag, "DamageAmp", false);
         if (!renderInitialised) {
             renderYaw = prevRenderYaw = yaw;
@@ -549,6 +637,7 @@ public class TurretBlockEntity extends CompatBlockEntity {
     protected void writeData(CompoundTag tag, HolderLookup.Provider registries) {
         writeClientData(tag, registries);
         tag.putInt("TicksSinceShot", state.getTicksSinceShot());
+        tag.putBoolean("AutoFire", autoFire);
     }
 
     /** Clients only need the aim, whether the turret is active and whether it shows the damage amp LEDs. */
