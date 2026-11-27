@@ -36,6 +36,8 @@ The other Minecraft versions have their own branches:
 - Uses **Team Reborn Energy** on Fabric, so it works with energy from other Fabric tech mods; the Forge build uses its energy capability (FE) instead
 - Optional **NEEPMeat** support (Fabric): vascular conduits power turret bases, 1 eJ per energy unit
 - Optional **Jade** support for turret bases and turrets, on both loaders
+- Computer control of turret bases (a Serial Port addon, or tier 5): a computer can aim and fire the turrets itself
+- Optional **CC: Tweaked** support (both loaders): turret bases are the peripheral `turret_base`, with the same functions as 1.12.2's computer commands, so a computer finds and controls a base with the Serial Port addon or at tier 5
 
 ## Requirements
 

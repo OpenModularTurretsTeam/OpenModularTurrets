@@ -93,6 +93,22 @@ val localRuntime: Configuration = configurations.create("localRuntime")
 val modLocalRuntime: Configuration = obfuscation.createRemappingConfiguration(localRuntime)
 configurations.runtimeClasspath { extendsFrom(localRuntime) }
 // Not on the GameTest server.
+// The same for the game test source set (CC: Tweaked, see dependencies): configurations of their own, so the remapping
+// leaves the game test's other dependencies (OMLib) alone
+val gametestLocalCompile: Configuration = configurations.create("gametestLocalCompile")
+val gametestModLocalCompile: Configuration = obfuscation.createRemappingConfiguration(gametestLocalCompile)
+configurations.getByName("gametestCompileOnly").extendsFrom(gametestLocalCompile)
+val gametestLocalRuntime: Configuration = configurations.create("gametestLocalRuntime")
+val gametestModLocalRuntime: Configuration = obfuscation.createRemappingConfiguration(gametestLocalRuntime)
+configurations.getByName("gametestRuntimeOnly").extendsFrom(gametestLocalRuntime)
+
+repositories {
+    // CC: Tweaked comes only from its own maven
+    exclusiveContent {
+        forRepository { maven("https://maven.squiddev.cc") { name = "CC-Tweaked" } }
+        filter { includeGroup("cc.tweaked") }
+    }
+}
 
 dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
@@ -127,6 +143,20 @@ dependencies {
     // Jade plugin (compat/jade, client/compat/jade): optional, not bundled; present in dev runs to try it
     "modCompileOnly"("maven.modrinth:jade:${property("jade_version")}")
     modLocalRuntime("maven.modrinth:jade:${property("jade_version")}")
+
+    // CC: Tweaked (optional, not bundled: the peripheral provider in platform/forge/computercraft is only registered
+    // when it is installed): its API compile-only, the full mod in the dev runs and on the game test server for the
+    // peripheral test. Its jars are SRG-named like the mod's own, so they go through the remapping configurations too.
+    findProperty("cctweaked_version")?.let { cc ->
+        val mc = property("minecraft_version")
+        // the Forge API jar has no dependency metadata, so the core API (IPeripheral, @LuaFunction, MethodResult) is named too
+        "modCompileOnly"("cc.tweaked:cc-tweaked-$mc-core-api:$cc")
+        "modCompileOnly"("cc.tweaked:cc-tweaked-$mc-forge-api:$cc")
+        modLocalRuntime("cc.tweaked:cc-tweaked-$mc-forge:$cc")
+        // the game test (compile: CC's own peripheral lookup, which the API does not have; run: the mod itself)
+        gametestModLocalCompile("cc.tweaked:cc-tweaked-$mc-forge:$cc")
+        gametestModLocalRuntime("cc.tweaked:cc-tweaked-$mc-forge:$cc")
+    }
 }
 // The client half of the Jade plugin (client/compat/jade) compiles against it too (remapped, through compileOnly)
 configurations.named("clientCompileOnly") { extendsFrom(configurations.compileOnly.get()) }
